@@ -94,7 +94,7 @@ function addPart(parts,name,qty,w,h,material,edgingMm,edgeKind,note='',role='',s
 function drawerFrontHeights(H,preset,smallH,gap){let count=preset==='1_big'?1:preset==='2_equal'?2:3; const net=(H-7)-((count-1)*gap); if(preset==='1_big')return[net]; if(preset==='2_equal'){const a=Math.floor(net/2);return[a,net-a]} if(preset==='3_equal'){const a=Math.floor(net/3),b=Math.floor(net/3);return[a,b,net-a-b]} const rest=net-smallH,big1=Math.floor(rest/2); if(preset==='1_small_2_big')return[smallH,big1,rest-big1]; return[big1,rest-big1,smallH];}
 function buildBaseSimple(parts, accessories, S,H,D,T,shelfDepth,topType,frontType){
  const innerW=S-(2*T);
- addPart(parts,'Bok',2,H,D,'płyta 18mm',2*H,'height1','oklejony przód','bok');
+ addPart(parts,'Bok',2,H,D,'płyta 18mm',2*H,'width1','oklejony przód','bok');
  addPart(parts,'Spód',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód po krawędzi 18 mm','spód');
  if(topType==='full') addPart(parts,'Góra pełna',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód','góra pełna'); else addPart(parts,'Listwa górna',2,innerW,100,'płyta 18mm',2*innerW,'width1','listwy na płasko, oklejony przód','listwa górna');
  addPart(parts,'Plecy HDF nakładane',1,S-2,H-2,'HDF',0,'none','1 mm luzu na stronę','plecy');
@@ -107,7 +107,7 @@ function buildBaseSimple(parts, accessories, S,H,D,T,shelfDepth,topType,frontTyp
 }
 function buildSink(parts, accessories, S,H,D,T){
  const innerW=S-(2*T);
- addPart(parts,'Bok',2,H,D,'płyta 18mm',2*H,'height1','oklejony przód','bok');
+ addPart(parts,'Bok',2,H,D,'płyta 18mm',2*H,'width1','oklejony przód','bok');
  addPart(parts,'Spód',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód po krawędzi 18 mm','spód');
  addPart(parts,'Listwa pod zlew',3,innerW,70,'płyta 18mm',3*(2*innerW),'width2','3 listwy po 70 mm, każda oklejona 2 razy po szerokości','listwa pod zlew');
  addPart(parts,'Front drzwiowy',1,S-3,H-7,'płyta 18mm/front',2*(S-3)+2*(H-7),'all','oklejony dookoła','front drzwiowy');
@@ -115,7 +115,7 @@ function buildSink(parts, accessories, S,H,D,T){
 }
 function buildCornerSimple(parts, accessories, S,H,D,T,shelfDepth){
  const innerW=S-(2*T); const frontW=+$('cornerFrontWidth').value; const gaps=+$('cornerGaps').value; const visibleW=100; const blindW=S-frontW-visibleW-gaps;
- addPart(parts,'Bok',2,H,D,'płyta 18mm',2*H,'height1','oklejony przód','bok');
+ addPart(parts,'Bok',2,H,D,'płyta 18mm',2*H,'width1','oklejony przód','bok');
  addPart(parts,'Spód',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód','spód');
  addPart(parts,'Góra pełna',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód','góra pełna');
  addPart(parts,'Plecy HDF nakładane',1,S-2,H-2,'HDF',0,'none','1 mm luzu na stronę','plecy');
