@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalkulator mebli - v1</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f4f5;
+      color: #18181b;
+    }
+    .app {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #e4e4e7;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.05);
+    }
+    h1 { margin: 0 0 10px; font-size: 26px; }
+    h2 { margin: 0 0 14px; font-size: 18px; }
+    h3 { margin: 22px 0 10px; font-size: 16px; }
+    label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    input, select {
+      width: 100%;
+      padding: 10px 11px;
+      border: 1px solid #d4d4d8;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fff;
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .field { margin-bottom: 13px; }
+    .check, .radio {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+    .check input, .radio input { width: auto; }
+    .hint {
+      font-size: 12px;
+      line-height: 1.45;
+      color: #52525b;
+      margin-top: 6px;
+    }
+    button {
+      width: 100%;
+      margin-top: 8px;
+      padding: 13px 15px;
+      border: 0;
+      border-radius: 12px;
+      background: #18181b;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    button:hover { opacity: .9; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+    th, td {
+      border-bottom: 1px solid #e4e4e7;
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #fafafa; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .summaryBox {
+      background: #fafafa;
+      border: 1px solid #e4e4e7;
+      border-radius: 12px;
+      padding: 13px;
+    }
+    .summaryBox strong { display: block; font-size: 20px; margin-top: 3px; }
+    .small { font-size: 12px; color: #52525b; }
+    .edgeMark {
+      display: inline-block;
+      line-height: 1.1;
+      font-family: 'Courier New', monospace;
+      white-space: pre-line;
+    }
+    .disabled { opacity: .45; pointer-events: none; }
+    .warn {
+      margin-top: 12px;
+      padding: 11px;
+      border-radius: 10px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #7c2d12;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 1fr; padding: 14px; }
+      .summary { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="card">
+      <h1>Kalkulator mebli</h1>
+      <div class="hint">v1: szafka dolna prosta, drzwi albo szuflady, półki, pełna góra/listwy, m², mb oklejania i ilość cięć.</div>
+
+      <h3>Wymiary</h3>
+      <div class="field">
+        <label>Szerokość szafki S [mm]</label>
+        <input id="width" type="number" value="600" min="100" />
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Wysokość H [mm]</label>
+          <input id="height" type="number" value="720" min="100" />
+        </div>
+        <div class="field">
+          <label>Głębokość D [mm]</label>
+          <input id="depth" type="number" value="510" min="100" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Grubość płyty [mm]</label>
+          <input id="board" type="number" value="18" min="1" />
+        </div>
+        <div class="field">
+          <label>Głębokość półki [mm]</label>
+          <input id="shelfDepth" type="number" value="500" min="50" />
+        </div>
+      </div>
+
+      <h3>Góra korpusu</h3>
+      <label class="radio"><input type="radio" name="topType" value="full" checked /> pełna płyta</label>
+      <label class="radio"><input type="radio" name="topType" value="rails" /> listwy 2 szt. po 100 mm</label>
+
+      <h3>Typ frontu</h3>
+      <label class="radio"><input type="radio" name="frontType" value="door" checked /> drzwi</label>
+      <label class="radio"><input type="radio" name="frontType" value="drawers" /> szuflady Blum Tandembox</label>
+
+      <div id="doorOptions">
+        <h3>Opcje drzwi</h3>
+        <label class="check"><input id="hasShelves" type="checkbox" /> półka/półki</label>
+        <div class="field" id="shelfQtyBox">
+          <label>Ilość półek</label>
+          <input id="shelfQty" type="number" value="1" min="1" />
+        </div>
+      </div>
+
+      <div id="drawerOptions" class="disabled">
+        <h3>Układ szuflad</h3>
+        <div class="field">
+          <label>Preset</label>
+          <select id="drawerPreset">
+            <option value="1_big">1 duża</option>
+            <option value="2_equal">2 równe</option>
+            <option value="3_equal">3 równe</option>
+            <option value="1_small_2_big">1 mała + 2 duże</option>
+            <option value="2_big_1_small">2 duże + 1 mała</option>
+          </select>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>Wysokość małej [mm]</label>
+            <input id="smallDrawerHeight" type="number" value="140" min="80" />
+          </div>
+          <div class="field">
+            <label>Przerwa między frontami [mm]</label>
+            <input id="drawerGap" type="number" value="3" min="0" />
+          </div>
+        </div>
+      </div>
+
+      <button onclick="calculate()">Przelicz</button>
+      <div class="warn">Uwaga: szuflady v1 liczą fronty + komplety Tandembox jako akcesoria. Nie rozpisuję jeszcze wewnętrznych elementów szuflady, bo przy Tandembox zwykle idzie komplet systemowy.</div>
+    </aside>
+
+    <main class="card">
+      <h2>Wynik</h2>
+      <div class="summary" id="summary"></div>
+      <h3>Formatki</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Element</th>
+            <th>Szt.</th>
+            <th>Wymiar</th>
+            <th>Oklejanie</th>
+            <th>Materiał</th>
+          </tr>
+        </thead>
+        <tbody id="parts"></tbody>
+      </table>
+
+      <h3>Akcesoria</h3>
+      <table>
+        <thead>
+          <tr><th>Akcesorium</th><th>Ilość</th><th>Uwagi</th></tr>
+        </thead>
+        <tbody id="accessories"></tbody>
+      </table>
+    </main>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function mm2ToM2(w, h, qty) {
+      return (w * h * qty) / 1000000;
+    }
+
+    function mmToMb(mm) {
+      return mm / 1000;
+    }
+
+    function fmt(n, d = 2) {
+      return Number(n).toFixed(d).replace('.', ',');
+    }
+
+    function edgeText(w, h, edge) {
+      // Symboliczny zapis: wymiar, a pod nim kreski według oklejania.
+      // edge: none, width1, height1, all
+      if (edge === 'width1') return `<span class="edgeMark">${w} × ${h}\n___</span>`;
+      if (edge === 'height1') return `<span class="edgeMark">${w} × ${h}\n_</span>`;
+      if (edge === 'all') return `<span class="edgeMark">${w} × ${h}\n___   ___</span>`;
+      return `${w} × ${h}`;
+    }
+
+    function addPart(parts, name, qty, w, h, material, edgingMm, edgeKind, note = '') {
+      parts.push({ name, qty, w, h, material, edgingMm, edgeKind, note });
+    }
+
+    function getRadio(name) {
+      return document.querySelector(`input[name="${name}"]:checked`).value;
+    }
+
+    function drawerFrontHeights(H, preset, smallH, gap) {
+      let count = preset === '1_big' ? 1 : preset === '2_equal' ? 2 : 3;
+      const totalFrontHeight = H - 7;
+      const gaps = (count - 1) * gap;
+      const net = totalFrontHeight - gaps;
+
+      if (preset === '1_big') return [net];
+      if (preset === '2_equal') {
+        const a = Math.floor(net / 2);
+        return [a, net - a];
+      }
+      if (preset === '3_equal') {
+        const a = Math.floor(net / 3);
+        const b = Math.floor(net / 3);
+        return [a, b, net - a - b];
+      }
+      if (preset === '1_small_2_big') {
+        const rest = net - smallH;
+        const big1 = Math.floor(rest / 2);
+        return [smallH, big1, rest - big1];
+      }
+      if (preset === '2_big_1_small') {
+        const rest = net - smallH;
+        const big1 = Math.floor(rest / 2);
+        return [big1, rest - big1, smallH];
+      }
+      return [net];
+    }
+
+    function calculate() {
+      const S = Number($('width').value);
+      const H = Number($('height').value);
+      const D = Number($('depth').value);
+      const T = Number($('board').value);
+      const shelfDepth = Number($('shelfDepth').value);
+      const innerW = S - (2 * T);
+      const topType = getRadio('topType');
+      const frontType = getRadio('frontType');
+      const parts = [];
+      const accessories = [];
+
+      // Korpus
+      addPart(parts, 'Bok', 2, H, D, 'płyta', 2 * H, 'height1', 'oklejony przód');
+      addPart(parts, 'Spód', 1, innerW, D, 'płyta', innerW, 'width1', 'oklejony przód po krawędzi 18 mm');
+
+      if (topType === 'full') {
+        addPart(parts, 'Góra pełna', 1, innerW, D, 'płyta', innerW, 'width1', 'oklejony przód');
+      } else {
+        addPart(parts, 'Listwa górna', 2, innerW, 100, 'płyta', 2 * innerW, 'width1', 'listwy na płasko, oklejony przód');
+      }
+
+      // Plecy HDF nakładane w dolnych
+      addPart(parts, 'Plecy HDF nakładane', 1, S - 2, H - 2, 'HDF', 0, 'none', '1 mm luzu na stronę');
+
+      // Fronty / drzwi / szuflady
+      if (frontType === 'door') {
+        addPart(parts, 'Front drzwiowy', 1, S - 3, H - 7, 'płyta/front', 2 * (S - 3) + 2 * (H - 7), 'all', 'oklejony dookoła');
+        const hinges = S <= 600 ? 2 : 3;
+        accessories.push(['Nóżki', 4, 'standard szafki dolnej']);
+        accessories.push(['Zawias prosty', hinges, 'do 600 mm: 2 szt., powyżej: 3 szt.']);
+
+        if ($('hasShelves').checked) {
+          const q = Number($('shelfQty').value);
+          addPart(parts, 'Półka', q, innerW, shelfDepth, 'płyta', q * innerW, 'width1', 'półka 10 mm płytsza od korpusu przy D=510');
+        }
+      } else {
+        const preset = $('drawerPreset').value;
+        const smallH = Number($('smallDrawerHeight').value);
+        const gap = Number($('drawerGap').value);
+        const heights = drawerFrontHeights(H, preset, smallH, gap);
+        heights.forEach((fh, i) => {
+          addPart(parts, `Front szuflady ${i + 1}`, 1, S - 3, fh, 'płyta/front', 2 * (S - 3) + 2 * fh, 'all', 'oklejony dookoła');
+        });
+        accessories.push(['Nóżki', 4, 'standard szafki dolnej']);
+        accessories.push(['Blum Tandembox', heights.length, '1 komplet na 1 szufladę']);
+      }
+
+      let boardM2 = 0;
+      let hdfM2 = 0;
+      let edgingMb = 0;
+      let cuts = 0;
+
+      parts.forEach(p => {
+        if (p.material === 'HDF') hdfM2 += mm2ToM2(p.w, p.h, p.qty);
+        else boardM2 += mm2ToM2(p.w, p.h, p.qty);
+        edgingMb += mmToMb(p.edgingMm);
+        cuts += p.qty;
+      });
+
+      $('summary').innerHTML = `
+        <div class="summaryBox"><span class="small">Płyta</span><strong>${fmt(boardM2)} m²</strong></div>
+        <div class="summaryBox"><span class="small">HDF</span><strong>${fmt(hdfM2)} m²</strong></div>
+        <div class="summaryBox"><span class="small">Oklejanie 1 mm</span><strong>${fmt(edgingMb)} mb</strong></div>
+        <div class="summaryBox"><span class="small">Cięcia</span><strong>${cuts} szt.</strong></div>
+      `;
+
+      $('parts').innerHTML = parts.map(p => `
+        <tr>
+          <td><strong>${p.name}</strong><div class="small">${p.note}</div></td>
+          <td>${p.qty}</td>
+          <td>${edgeText(p.w, p.h, p.edgeKind)}</td>
+          <td>${p.edgingMm ? fmt(mmToMb(p.edgingMm)) + ' mb' : '-'}</td>
+          <td>${p.material}</td>
+        </tr>
+      `).join('');
+
+      $('accessories').innerHTML = accessories.map(a => `
+        <tr><td><strong>${a[0]}</strong></td><td>${a[1]}</td><td>${a[2]}</td></tr>
+      `).join('');
+    }
+
+    function syncOptions() {
+      const frontType = getRadio('frontType');
+      $('doorOptions').classList.toggle('disabled', frontType !== 'door');
+      $('drawerOptions').classList.toggle('disabled', frontType !== 'drawers');
+    }
+
+    document.querySelectorAll('input[name="frontType"]').forEach(el => el.addEventListener('change', () => { syncOptions(); calculate(); }));
+    document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', calculate));
+    document.querySelectorAll('input[name="topType"]').forEach(el => el.addEventListener('change', calculate));
+
+    syncOptions();
+    calculate();
+  </script>
+</body>
+</html>
