@@ -19,7 +19,7 @@
     .btn2{background:#3f3f46}.btnDanger{background:#b91c1c;padding:8px 10px;font-size:12px;margin:0;width:auto;border-radius:9px}.btnSmall{width:auto;padding:9px 12px;font-size:12px;border-radius:9px;margin:0 6px 8px 0;background:#3f3f46}
     table{width:100%;border-collapse:collapse;font-size:14px;overflow:hidden;border-radius:12px} th,td{border-bottom:1px solid #e4e4e7;padding:9px;text-align:left;vertical-align:top} th{background:#fafafa;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
     .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.summaryBox{background:#fafafa;border:1px solid #e4e4e7;border-radius:12px;padding:13px}.summaryBox strong{display:block;font-size:20px;margin-top:3px}
-    .warn{margin-top:12px;padding:11px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:13px;line-height:1.45}
+    .warn{margin-top:12px;padding:11px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:13px;line-height:1.45}.cornerCalc{margin-top:10px;padding:12px;border-radius:12px;background:#eef6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:13px;line-height:1.5}.cornerCalc.error{background:#fef2f2;border-color:#fecaca;color:#991b1b}.cornerCalc strong{display:block;font-size:14px;margin-bottom:4px}
     .cabinetBox{border:1px solid #e4e4e7;border-radius:12px;padding:12px;margin-bottom:12px;background:#fff}.cabinetHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}.cabinetHead strong{font-size:15px}
     .toolbar{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}.printOnly{display:none}.sectionBox{border:1px solid #e4e4e7;border-radius:12px;padding:12px;margin-bottom:16px;background:#fff}.serviceCell{min-width:160px;color:#71717a}.cabinetTitle{background:#f4f4f5;font-weight:800;padding:9px 10px;border-radius:10px;margin:14px 0 8px}
     .edgeWrap{display:inline-flex;align-items:flex-start;gap:5px;font-family:'Courier New',monospace;line-height:1.05;font-size:14px}.edgeDim{display:inline-flex;flex-direction:column;align-items:center;min-width:34px}.edgeX{padding-top:0}.mark{height:12px;line-height:12px;letter-spacing:0}
@@ -49,7 +49,7 @@
 
     <div id="drawerOptions" class="disabled"><h3>Układ szuflad</h3><div class="field"><label>Preset</label><select id="drawerPreset"><option value="1_big">1 duża</option><option value="2_equal">2 równe</option><option value="3_equal">3 równe</option><option value="1_small_2_big">1 mała + 2 duże</option><option value="2_big_1_small">2 duże + 1 mała</option></select></div><div class="row"><div class="field"><label>Wysokość małej [mm]</label><input id="smallDrawerHeight" type="number" value="140" min="80" /></div><div class="field"><label>Przerwa między frontami [mm]</label><input id="drawerGap" type="number" value="3" min="0" /></div></div></div>
 
-    <div id="cornerOptions" class="hidden"><h3>Narożna prosta</h3><div class="field"><label>Szerokość frontu [mm] — wymagane</label><input id="cornerFrontWidth" type="number" value="400" min="100" /></div><div class="field"><label>Suma szczelin przy odbiciach [mm]</label><input id="cornerGaps" type="number" value="6" min="0" /></div><div class="hint">Widoczne odbicie ma stałe 100 mm. Ślepe odbicie = S - front - 100 mm - szczeliny.</div></div>
+    <div id="cornerOptions" class="hidden"><h3>Narożna prosta</h3><div class="field"><label>Szerokość frontu [mm] — wymagane</label><input id="cornerFrontWidth" type="number" value="400" min="100" /></div><div class="field"><label>Suma szczelin przy odbiciach [mm]</label><input id="cornerGaps" type="number" value="6" min="0" /></div><div id="cornerCalc" class="cornerCalc"></div><div class="hint">Widoczne odbicie ma stałe 100 mm. Ślepe odbicie = S - front - 100 mm - szczeliny.</div></div>
 
     <button onclick="addCabinet()">Dodaj szafkę do wyceny</button>
     <button class="btn2" onclick="clearProject()">Wyczyść całą wycenę</button>
@@ -133,7 +133,19 @@ function buildCabinet(){
  const sums=sumCabinet({parts,accessories}); return {type,name,S,H,D,frontType:type==='base_simple'?getRadio('frontType'):'door',parts,accessories,sums};
 }
 function sumCabinet(c){let boardM2=0,hdfM2=0,edgingMb=0,cuts=0; c.parts.forEach(p=>{if(p.material==='HDF')hdfM2+=mm2ToM2(p.w,p.h,p.qty); else boardM2+=mm2ToM2(p.w,p.h,p.qty); edgingMb+=mmToMb(p.edgingMm); cuts+=p.qty}); return{boardM2,hdfM2,edgingMb,cuts}}
-function addCabinet(){const c=buildCabinet(); const invalid=c.parts.find(p=>p.w<=0||p.h<=0||Number.isNaN(p.w)||Number.isNaN(p.h)); if(invalid){alert('Błąd wymiaru: '+invalid.name+' ma wymiar '+invalid.w+' x '+invalid.h+'. Sprawdź szerokość/front/szczeliny.'); return;} project.push(c); save(); render()}
+function addCabinet(){
+ const c=buildCabinet();
+ const invalid=c.parts.find(p=>p.w<=0||p.h<=0||Number.isNaN(p.w)||Number.isNaN(p.h));
+ if(invalid){
+   if(c.type==='base_corner_simple'){
+     alert('Błąd wymiaru w narożnej: '+invalid.name+' ma wymiar '+invalid.w+' x '+invalid.h+'. Sprawdź szerokość całej szafki, szerokość frontu i szczeliny.');
+   } else {
+     alert('Błąd wymiaru: '+invalid.name+' ma wymiar '+invalid.w+' x '+invalid.h+'. Sprawdź szerokość, wysokość i głębokość.');
+   }
+   return;
+ }
+ project.push(c); save(); render();
+}
 function removeCabinet(i){project.splice(i,1); save(); render()}
 function clearProject(){if(confirm('Wyczyścić całą wycenę?')){project=[]; save(); render()}}
 function save(){localStorage.setItem('mebleProjectV6',JSON.stringify(project))}
@@ -146,7 +158,25 @@ function copyProductionList(){let lines=['LISTA DO ZAMÓWIENIA FORMATEK','','PŁ
 function copyAssemblyList(){let lines=['LISTA DLA MNIE DO SKRĘCANIA']; project.forEach((c,i)=>{lines.push('',`${i+1}. ${cabinetLabel(c)} — ${c.S} x ${c.H} x ${c.D} mm`); c.parts.forEach(p=>lines.push(`${edgePlain(p.w,p.h,p.edgeKind)} | ${p.qty} szt. | ${p.role} | ${p.material} | ${p.note}`))}); navigator.clipboard.writeText(lines.join('\n')).then(()=>alert('Lista montażowa skopiowana.'))}
 function typeLabel(t){if(t==='base_sink')return 'dolna pod zlew'; if(t==='base_corner_simple')return 'dolna narożna prosta'; return 'dolna prosta'}
 function render(){const cur=buildCabinet(); $('currentSummary').innerHTML=summaryHtml(cur.sums); $('currentParts').innerHTML=partsRows(cur.parts,cabinetLabel(cur)); $('cabinetList').innerHTML=project.length?project.map((c,i)=>`<div class="cabinetBox"><div class="cabinetHead"><div><strong>${i+1}. ${cabinetLabel(c)}</strong><div class="small">${c.S} × ${c.H} × ${c.D} mm | ${typeLabel(c.type)}</div></div><button class="btnDanger" onclick="removeCabinet(${i})">Usuń</button></div><div class="small">Płyta: ${fmt(c.sums.boardM2)} m² | HDF: ${fmt(c.sums.hdfM2)} m² | Okleina: ${fmt(c.sums.edgingMb)} mb | Cięcia: ${c.sums.cuts}</div></div>`).join(''):'<div class="hint">Nie dodano jeszcze żadnej szafki.</div>'; const total={boardM2:0,hdfM2:0,edgingMb:0,cuts:0},acc={}; project.forEach(c=>{total.boardM2+=c.sums.boardM2; total.hdfM2+=c.sums.hdfM2; total.edgingMb+=c.sums.edgingMb; total.cuts+=c.sums.cuts; c.accessories.forEach(a=>acc[a[0]]=(acc[a[0]]||0)+a[1])}); $('projectSummary').innerHTML=summaryHtml(total); $('projectAccessories').innerHTML=Object.keys(acc).length?Object.entries(acc).map(([k,v])=>`<tr><td><strong>${k}</strong></td><td>${v}</td></tr>`).join(''):'<tr><td colspan="2">Brak</td></tr>'; $('boardProductionRows').innerHTML=productionRows('board'); $('hdfProductionRows').innerHTML=productionRows('HDF'); $('assemblyList').innerHTML=assemblyListHtml()}
-function syncOptions(){const type=$('cabinetType').value, ft=getRadio('frontType'); const isSimple=type==='base_simple', isSink=type==='base_sink', isCorner=type==='base_corner_simple'; $('simpleTopOptions').classList.toggle('hidden',!isSimple); $('frontTypeOptions').classList.toggle('hidden',!isSimple); $('drawerOptions').classList.toggle('hidden',!isSimple||ft!=='drawers'); $('drawerOptions').classList.toggle('disabled',!isSimple||ft!=='drawers'); $('cornerOptions').classList.toggle('hidden',!isCorner); $('doorOptions').classList.toggle('hidden',isSink); $('doorOptions').classList.toggle('disabled',isSimple&&ft!=='door'); render()}
+function updateCornerCalc(){
+ const box=$('cornerCalc'); if(!box) return;
+ const type=$('cabinetType').value;
+ if(type!=='base_corner_simple'){ box.innerHTML=''; box.classList.remove('error'); return; }
+ const S=+$('width').value;
+ const frontW=+$('cornerFrontWidth').value;
+ const gaps=+$('cornerGaps').value;
+ const visibleW=100;
+ const blindW=S-frontW-visibleW-gaps;
+ const maxFront=S-visibleW-gaps-1;
+ if(blindW<=0){
+  box.classList.add('error');
+  box.innerHTML=`<strong>Front z odbiciem ma za duży wymiar</strong>Cała szafka: ${S} mm<br>Front: ${frontW} mm + odbicie widoczne: ${visibleW} mm + szczeliny: ${gaps} mm = <b>${frontW+visibleW+gaps} mm</b><br>To jest za dużo dla tej szerokości. Maksymalny front przy tych ustawieniach: <b>${maxFront} mm</b>.`;
+ } else {
+  box.classList.remove('error');
+  box.innerHTML=`<strong>Rozbicie szerokości narożnej</strong>Cała szafka: <b>${S} mm</b><br>Front: ${frontW} mm + odbicie widoczne: 100 mm + szczeliny: ${gaps} mm + odbicie ślepe: <b>${blindW} mm</b>`;
+ }
+}
+function syncOptions(){const type=$('cabinetType').value, ft=getRadio('frontType'); const isSimple=type==='base_simple', isSink=type==='base_sink', isCorner=type==='base_corner_simple'; $('simpleTopOptions').classList.toggle('hidden',!isSimple); $('frontTypeOptions').classList.toggle('hidden',!isSimple); $('drawerOptions').classList.toggle('hidden',!isSimple||ft!=='drawers'); $('drawerOptions').classList.toggle('disabled',!isSimple||ft!=='drawers'); $('cornerOptions').classList.toggle('hidden',!isCorner); $('doorOptions').classList.toggle('hidden',isSink); $('doorOptions').classList.toggle('disabled',isSimple&&ft!=='door'); updateCornerCalc(); render()}
 document.querySelectorAll('input[name="frontType"]').forEach(el=>el.addEventListener('change',syncOptions)); document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',render)); document.querySelectorAll('input[name="topType"]').forEach(el=>el.addEventListener('change',render)); $('cabinetType').addEventListener('change',syncOptions); syncOptions();
 </script>
 </body>
