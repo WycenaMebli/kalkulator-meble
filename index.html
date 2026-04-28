@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kalkulator mebli - v4</title>
+  <title>Kalkulator mebli - v5</title>
   <style>
     * { box-sizing: border-box; }
     body { margin:0; font-family:Arial,sans-serif; background:#f4f4f5; color:#18181b; }
-    .app { max-width:1500px; margin:0 auto; padding:24px; display:grid; grid-template-columns:360px 1fr; gap:20px; }
+    .app { max-width:1500px; margin:0 auto; padding:24px; display:grid; grid-template-columns:380px 1fr; gap:20px; }
     .card { background:#fff; border:1px solid #e4e4e7; border-radius:14px; padding:18px; box-shadow:0 8px 22px rgba(0,0,0,.05); }
     h1 { margin:0 0 10px; font-size:26px; } h2{margin:0 0 14px;font-size:18px;} h3{margin:22px 0 10px;font-size:16px;} h4{margin:18px 0 8px;font-size:15px;}
     label { display:block; font-size:13px; font-weight:700; margin-bottom:6px; }
     input, select { width:100%; padding:10px 11px; border:1px solid #d4d4d8; border-radius:10px; font-size:15px; background:#fff; }
     .row { display:grid; grid-template-columns:1fr 1fr; gap:10px; } .field{margin-bottom:13px;}
     .check,.radio{display:flex;align-items:center;gap:9px;margin:8px 0;font-size:14px}.check input,.radio input{width:auto}
-    .hint,.small{font-size:12px;line-height:1.45;color:#52525b}.disabled{opacity:.45;pointer-events:none}
+    .hint,.small{font-size:12px;line-height:1.45;color:#52525b}.disabled{opacity:.45;pointer-events:none}.hidden{display:none!important;}
     button{width:100%;margin-top:8px;padding:13px 15px;border:0;border-radius:12px;background:#18181b;color:#fff;font-size:15px;font-weight:800;cursor:pointer} button:hover{opacity:.9}
     .btn2{background:#3f3f46}.btnDanger{background:#b91c1c;padding:8px 10px;font-size:12px;margin:0;width:auto;border-radius:9px}.btnSmall{width:auto;padding:9px 12px;font-size:12px;border-radius:9px;margin:0 6px 8px 0;background:#3f3f46}
     table{width:100%;border-collapse:collapse;font-size:14px;overflow:hidden;border-radius:12px} th,td{border-bottom:1px solid #e4e4e7;padding:9px;text-align:left;vertical-align:top} th{background:#fafafa;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
     .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.summaryBox{background:#fafafa;border:1px solid #e4e4e7;border-radius:12px;padding:13px}.summaryBox strong{display:block;font-size:20px;margin-top:3px}
-    .edgeMark{display:inline-block;line-height:1.1;font-family:'Courier New',monospace;white-space:pre-line;font-size:14px}.warn{margin-top:12px;padding:11px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:13px;line-height:1.45}
+    .edgeMark{display:inline-block;line-height:1.05;font-family:'Courier New',monospace;white-space:pre-line;font-size:14px}.warn{margin-top:12px;padding:11px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:13px;line-height:1.45}
     .cabinetBox{border:1px solid #e4e4e7;border-radius:12px;padding:12px;margin-bottom:12px;background:#fff}.cabinetHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}.cabinetHead strong{font-size:15px}
     .toolbar{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}.printOnly{display:none}.sectionBox{border:1px solid #e4e4e7;border-radius:12px;padding:12px;margin-bottom:16px;background:#fff}.serviceCell{min-width:160px;color:#71717a}.cabinetTitle{background:#f4f4f5;font-weight:800;padding:9px 10px;border-radius:10px;margin:14px 0 8px}
     @media(max-width:900px){.app{grid-template-columns:1fr;padding:14px}.summary{grid-template-columns:1fr 1fr}}
@@ -33,21 +33,35 @@
 <div class="app">
   <aside class="card">
     <h1>Kalkulator mebli</h1>
-    <div class="hint">v4: wiele szafek + lista produkcyjna osobno płyta/HDF + lista montażowa szafka po szafce.</div>
+    <div class="hint">v5: typy szafek: dolna prosta, pod zlew, narożna prosta. Lista produkcyjna osobno płyta/HDF i lista montażowa.</div>
+
+    <h3>Typ szafki</h3>
+    <div class="field">
+      <label>Wybierz typ</label>
+      <select id="cabinetType">
+        <option value="base_simple">Dolna prosta</option>
+        <option value="base_sink">Dolna pod zlew</option>
+        <option value="base_corner_simple">Dolna narożna prosta</option>
+      </select>
+    </div>
 
     <h3>Dane szafki</h3>
     <div class="field"><label>Nazwa szafki</label><input id="cabinetName" value="Szafka dolna" /></div>
-    <div class="field"><label>Szerokość S [mm]</label><input id="width" type="number" value="600" min="100" /></div>
+    <div class="field"><label>Szerokość całej szafki S [mm]</label><input id="width" type="number" value="600" min="100" /></div>
     <div class="row"><div class="field"><label>Wysokość H [mm]</label><input id="height" type="number" value="720" min="100" /></div><div class="field"><label>Głębokość D [mm]</label><input id="depth" type="number" value="510" min="100" /></div></div>
     <div class="row"><div class="field"><label>Grubość płyty [mm]</label><input id="board" type="number" value="18" min="1" /></div><div class="field"><label>Głębokość półki [mm]</label><input id="shelfDepth" type="number" value="500" min="50" /></div></div>
 
-    <h3>Góra korpusu</h3>
-    <label class="radio"><input type="radio" name="topType" value="full" checked /> pełna płyta</label>
-    <label class="radio"><input type="radio" name="topType" value="rails" /> listwy 2 szt. po 100 mm</label>
+    <div id="simpleTopOptions">
+      <h3>Góra korpusu</h3>
+      <label class="radio"><input type="radio" name="topType" value="full" checked /> pełna płyta</label>
+      <label class="radio"><input type="radio" name="topType" value="rails" /> listwy 2 szt. po 100 mm</label>
+    </div>
 
-    <h3>Typ frontu</h3>
-    <label class="radio"><input type="radio" name="frontType" value="door" checked /> drzwi</label>
-    <label class="radio"><input type="radio" name="frontType" value="drawers" /> szuflady Blum Tandembox</label>
+    <div id="frontTypeOptions">
+      <h3>Typ frontu</h3>
+      <label class="radio"><input type="radio" name="frontType" value="door" checked /> drzwi</label>
+      <label class="radio"><input type="radio" name="frontType" value="drawers" /> szuflady Blum Tandembox</label>
+    </div>
 
     <div id="doorOptions">
       <h3>Opcje drzwi</h3>
@@ -61,9 +75,16 @@
       <div class="row"><div class="field"><label>Wysokość małej [mm]</label><input id="smallDrawerHeight" type="number" value="140" min="80" /></div><div class="field"><label>Przerwa między frontami [mm]</label><input id="drawerGap" type="number" value="3" min="0" /></div></div>
     </div>
 
+    <div id="cornerOptions" class="hidden">
+      <h3>Narożna prosta</h3>
+      <div class="field"><label>Szerokość frontu [mm] — wymagane</label><input id="cornerFrontWidth" type="number" value="400" min="100" /></div>
+      <div class="field"><label>Suma szczelin przy odbiciach [mm]</label><input id="cornerGaps" type="number" value="6" min="0" /></div>
+      <div class="hint">Widoczne odbicie ma stałe 100 mm. Ślepy bok = szerokość całej szafki - szerokość frontu - 100 mm - szczeliny.</div>
+    </div>
+
     <button onclick="addCabinet()">Dodaj szafkę do wyceny</button>
     <button class="btn2" onclick="clearProject()">Wyczyść całą wycenę</button>
-    <div class="warn">Każda dodana szafka zapisuje się w przeglądarce. Możesz zamknąć stronę i wrócić później.</div>
+    <div class="warn">Uwaga: narożna prosta w tej wersji liczy klasyczny korpus + front + odbicie widoczne + ślepe. Jak doprecyzujesz konstrukcję narożnej, dopasujemy formatki.</div>
   </aside>
 
   <main class="card">
@@ -116,17 +137,19 @@
 </div>
 
 <script>
-const $=id=>document.getElementById(id); let project=JSON.parse(localStorage.getItem('mebleProjectV4')||localStorage.getItem('mebleProjectV3')||localStorage.getItem('mebleProjectV2')||'[]');
+const $=id=>document.getElementById(id); let project=JSON.parse(localStorage.getItem('mebleProjectV5')||localStorage.getItem('mebleProjectV4')||localStorage.getItem('mebleProjectV3')||localStorage.getItem('mebleProjectV2')||'[]');
 function mm2ToM2(w,h,q){return(w*h*q)/1000000} function mmToMb(mm){return mm/1000} function fmt(n,d=2){return Number(n).toFixed(d).replace('.',',')} function getRadio(n){return document.querySelector(`input[name="${n}"]:checked`).value}
-function edgeText(w,h,e){ if(e==='width1')return `<span class="edgeMark">${w} × ${h}\n___</span>`; if(e==='height1')return `<span class="edgeMark">${w} × ${h}\n_</span>`; if(e==='all')return `<span class="edgeMark">${w} × ${h}\n___   ___</span>`; return `${w} × ${h}`; }
-function edgePlain(w,h,e){ if(e==='width1')return `${w} x ${h}\n___`; if(e==='height1')return `${w} x ${h}\n_`; if(e==='all')return `${w} x ${h}\n___   ___`; return `${w} x ${h}`; }
-function edgeLabel(e){ if(e==='width1')return 'oklejony 1 raz po pierwszym wymiarze/przodzie'; if(e==='height1')return 'oklejony 1 raz po pierwszym wymiarze/przodzie'; if(e==='all')return 'oklejony dookoła'; return '-'; }
+function line(len){ const chars=Math.max(3, Math.min(18, Math.round(len/55))); return '_'.repeat(chars); }
+function edgeText(w,h,e){ const lw=line(w), lh=line(h); if(e==='width1')return `<span class="edgeMark">${w} × ${h}\n${lw}</span>`; if(e==='width2')return `<span class="edgeMark">${w} × ${h}\n${lw}\n${lw}</span>`; if(e==='height1')return `<span class="edgeMark">${w} × ${h}\n${lh}</span>`; if(e==='all')return `<span class="edgeMark">${w} × ${h}\n${lw}\n${lw}</span>`; return `${w} × ${h}`; }
+function edgePlain(w,h,e){ const lw=line(w), lh=line(h); if(e==='width1')return `${w} x ${h}\n${lw}`; if(e==='width2')return `${w} x ${h}\n${lw}\n${lw}`; if(e==='height1')return `${w} x ${h}\n${lh}`; if(e==='all')return `${w} x ${h}\n${lw}\n${lw}`; return `${w} x ${h}`; }
+function edgeLabel(e){ if(e==='width1')return 'oklejony 1 raz po pierwszym wymiarze/przodzie'; if(e==='width2')return 'oklejony 2 razy po pierwszym wymiarze'; if(e==='height1')return 'oklejony 1 raz po wysokości/przodzie'; if(e==='all')return 'oklejony dookoła'; return '-'; }
 function cabinetLabel(c){ return `${c.name} ${c.S}`.trim(); }
 function addPart(parts,name,qty,w,h,material,edgingMm,edgeKind,note='',role='',services=''){parts.push({name,qty,w,h,material,edgingMm,edgeKind,note,role,services})}
 function drawerFrontHeights(H,preset,smallH,gap){let count=preset==='1_big'?1:preset==='2_equal'?2:3; const net=(H-7)-((count-1)*gap); if(preset==='1_big')return[net]; if(preset==='2_equal'){const a=Math.floor(net/2);return[a,net-a]} if(preset==='3_equal'){const a=Math.floor(net/3),b=Math.floor(net/3);return[a,b,net-a-b]} const rest=net-smallH,big1=Math.floor(rest/2); if(preset==='1_small_2_big')return[smallH,big1,rest-big1]; return[big1,rest-big1,smallH];}
-function buildCabinet(){
- const name=$('cabinetName').value||'Szafka'; const S=+$('width').value,H=+$('height').value,D=+$('depth').value,T=+$('board').value, shelfDepth=+$('shelfDepth').value; const innerW=S-(2*T), topType=getRadio('topType'), frontType=getRadio('frontType'); const parts=[],accessories=[];
- addPart(parts,'Bok',2,H,D,'płyta 18mm',2*H,'height1','oklejony przód','bok'); addPart(parts,'Spód',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód po krawędzi 18 mm','spód');
+function buildBaseSimple(parts, accessories, S,H,D,T, shelfDepth, topType, frontType){
+ const innerW=S-(2*T);
+ addPart(parts,'Bok',2,H,D,'płyta 18mm',2*H,'height1','oklejony przód','bok');
+ addPart(parts,'Spód',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód po krawędzi 18 mm','spód');
  if(topType==='full') addPart(parts,'Góra pełna',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód','góra pełna'); else addPart(parts,'Listwa górna',2,innerW,100,'płyta 18mm',2*innerW,'width1','listwy na płasko, oklejony przód','listwa górna');
  addPart(parts,'Plecy HDF nakładane',1,S-2,H-2,'HDF',0,'none','1 mm luzu na stronę','plecy');
  if(frontType==='door'){
@@ -135,13 +158,39 @@ function buildCabinet(){
  } else {
   const heights=drawerFrontHeights(H,$('drawerPreset').value,+$('smallDrawerHeight').value,+$('drawerGap').value); heights.forEach((fh,i)=>addPart(parts,`Front szuflady ${i+1}`,1,S-3,fh,'płyta 18mm/front',2*(S-3)+2*fh,'all','oklejony dookoła',`front szuflady ${i+1}`)); accessories.push(['Nóżki',4]); accessories.push(['Blum Tandembox',heights.length]);
  }
- const sums=sumCabinet({parts,accessories}); return {name,S,H,D,topType,frontType,parts,accessories,sums};
+}
+function buildSink(parts, accessories, S,H,D,T){
+ const innerW=S-(2*T);
+ addPart(parts,'Bok',2,H,D,'płyta 18mm',2*H,'height1','oklejony przód','bok');
+ addPart(parts,'Spód',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód po krawędzi 18 mm','spód');
+ addPart(parts,'Listwa pod zlew',3,innerW,70,'płyta 18mm',3*(2*innerW),'width2','3 listwy po 70 mm, oklejane dwa razy po szerokości','listwa pod zlew');
+ addPart(parts,'Front drzwiowy',1,S-3,H-7,'płyta 18mm/front',2*(S-3)+2*(H-7),'all','oklejony dookoła','front drzwiowy');
+ accessories.push(['Nóżki',4]); accessories.push(['Zawias prosty',S<=600?2:3]);
+}
+function buildCornerSimple(parts, accessories, S,H,D,T, shelfDepth){
+ const innerW=S-(2*T); const frontW=+$('cornerFrontWidth').value; const gaps=+$('cornerGaps').value; const visibleReturnW=100; const blindW=S-frontW-visibleReturnW-gaps;
+ addPart(parts,'Bok',2,H,D,'płyta 18mm',2*H,'height1','oklejony przód','bok');
+ addPart(parts,'Spód',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód','spód');
+ addPart(parts,'Góra pełna',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód','góra pełna');
+ addPart(parts,'Plecy HDF nakładane',1,S-2,H-2,'HDF',0,'none','1 mm luzu na stronę','plecy');
+ addPart(parts,'Front narożny',1,frontW,H-7,'płyta 18mm/front',2*frontW+2*(H-7),'all','oklejony dookoła','front');
+ addPart(parts,'Odbicie widoczne',1,visibleReturnW,H-7,'płyta 18mm/front',2*visibleReturnW+2*(H-7),'all','widoczne odbicie 100 mm, oklejone dookoła','odbicie widoczne');
+ addPart(parts,'Odbicie ślepe',1,blindW,H,'płyta 18mm',H,'height1',`szerokość = S - front - 100 - szczeliny (${gaps} mm)`,'odbicie ślepe');
+ if($('hasShelves').checked){const q=+$('shelfQty').value; addPart(parts,'Półka narożna prosta',q,innerW,shelfDepth,'płyta 18mm',q*innerW,'width1','półka oklejona z przodu','półka');}
+ accessories.push(['Nóżki',6]); accessories.push(['Zawias prosty',frontW<=600?2:3]);
+}
+function buildCabinet(){
+ const type=$('cabinetType').value; const name=$('cabinetName').value||'Szafka'; const S=+$('width').value,H=+$('height').value,D=+$('depth').value,T=+$('board').value, shelfDepth=+$('shelfDepth').value; const topType=getRadio('topType'), frontType=getRadio('frontType'); const parts=[],accessories=[];
+ if(type==='base_simple') buildBaseSimple(parts,accessories,S,H,D,T,shelfDepth,topType,frontType);
+ if(type==='base_sink') buildSink(parts,accessories,S,H,D,T);
+ if(type==='base_corner_simple') buildCornerSimple(parts,accessories,S,H,D,T,shelfDepth);
+ const sums=sumCabinet({parts,accessories}); return {type,name,S,H,D,topType,frontType,parts,accessories,sums};
 }
 function sumCabinet(c){let boardM2=0,hdfM2=0,edgingMb=0,cuts=0; c.parts.forEach(p=>{ if(p.material==='HDF')hdfM2+=mm2ToM2(p.w,p.h,p.qty); else boardM2+=mm2ToM2(p.w,p.h,p.qty); edgingMb+=mmToMb(p.edgingMm); cuts+=p.qty;}); return{boardM2,hdfM2,edgingMb,cuts};}
-function addCabinet(){ project.push(buildCabinet()); save(); render(); }
+function addCabinet(){ const c=buildCabinet(); const invalid=c.parts.find(p=>p.w<=0||p.h<=0); if(invalid){alert('Błąd wymiaru: '+invalid.name+' ma wymiar '+invalid.w+' x '+invalid.h+'. Sprawdź szerokość/front/szczeliny.'); return;} project.push(c); save(); render(); }
 function removeCabinet(i){ project.splice(i,1); save(); render(); }
 function clearProject(){ if(confirm('Wyczyścić całą wycenę?')){project=[];save();render();}}
-function save(){localStorage.setItem('mebleProjectV4',JSON.stringify(project));}
+function save(){localStorage.setItem('mebleProjectV5',JSON.stringify(project));}
 function summaryHtml(s){return `<div class="summaryBox"><span class="small">Płyta</span><strong>${fmt(s.boardM2)} m²</strong></div><div class="summaryBox"><span class="small">HDF</span><strong>${fmt(s.hdfM2)} m²</strong></div><div class="summaryBox"><span class="small">Oklejanie 1 mm</span><strong>${fmt(s.edgingMb)} mb</strong></div><div class="summaryBox"><span class="small">Cięcia</span><strong>${s.cuts} szt.</strong></div>`}
 function partsRows(parts, cLabel='aktualnej szafki'){return parts.map(p=>`<tr><td><strong>${p.name}</strong><div class="small">${p.note}</div></td><td>${p.qty}</td><td>${edgeText(p.w,p.h,p.edgeKind)}</td><td>${p.edgingMm?fmt(mmToMb(p.edgingMm))+' mb':'-'}</td><td>${p.material}</td><td>${p.role} do ${cLabel}</td></tr>`).join('')}
 function allRows(){let rows=[]; project.forEach((c,ci)=>{const label=cabinetLabel(c); c.parts.forEach(p=>rows.push({cabinetIndex:ci+1,label,p}));}); return rows;}
@@ -161,13 +210,26 @@ function copyAssemblyList(){
 }
 function render(){
  const cur=buildCabinet(); $('currentSummary').innerHTML=summaryHtml(cur.sums); $('currentParts').innerHTML=partsRows(cur.parts, cabinetLabel(cur));
- $('cabinetList').innerHTML=project.length?project.map((c,i)=>`<div class="cabinetBox"><div class="cabinetHead"><div><strong>${i+1}. ${cabinetLabel(c)}</strong><div class="small">${c.S} × ${c.H} × ${c.D} mm | ${c.frontType==='door'?'drzwi':'szuflady'}</div></div><button class="btnDanger" onclick="removeCabinet(${i})">Usuń</button></div><div class="small">Płyta: ${fmt(c.sums.boardM2)} m² | HDF: ${fmt(c.sums.hdfM2)} m² | Okleina: ${fmt(c.sums.edgingMb)} mb | Cięcia: ${c.sums.cuts}</div></div>`).join(''):'<div class="hint">Nie dodano jeszcze żadnej szafki.</div>';
+ $('cabinetList').innerHTML=project.length?project.map((c,i)=>`<div class="cabinetBox"><div class="cabinetHead"><div><strong>${i+1}. ${cabinetLabel(c)}</strong><div class="small">${c.S} × ${c.H} × ${c.D} mm | ${typeLabel(c.type)} | ${c.frontType==='door'?'drzwi':c.frontType==='drawers'?'szuflady':'-'}</div></div><button class="btnDanger" onclick="removeCabinet(${i})">Usuń</button></div><div class="small">Płyta: ${fmt(c.sums.boardM2)} m² | HDF: ${fmt(c.sums.hdfM2)} m² | Okleina: ${fmt(c.sums.edgingMb)} mb | Cięcia: ${c.sums.cuts}</div></div>`).join(''):'<div class="hint">Nie dodano jeszcze żadnej szafki.</div>';
  const total={boardM2:0,hdfM2:0,edgingMb:0,cuts:0}; const acc={}; project.forEach(c=>{total.boardM2+=c.sums.boardM2;total.hdfM2+=c.sums.hdfM2;total.edgingMb+=c.sums.edgingMb;total.cuts+=c.sums.cuts;c.accessories.forEach(a=>acc[a[0]]=(acc[a[0]]||0)+a[1]);});
  $('projectSummary').innerHTML=summaryHtml(total); $('projectAccessories').innerHTML=Object.keys(acc).length?Object.entries(acc).map(([k,v])=>`<tr><td><strong>${k}</strong></td><td>${v}</td></tr>`).join(''):'<tr><td colspan="2">Brak</td></tr>';
  $('boardProductionRows').innerHTML=productionRows('board'); $('hdfProductionRows').innerHTML=productionRows('HDF'); $('assemblyList').innerHTML=assemblyListHtml();
 }
-function syncOptions(){const ft=getRadio('frontType'); $('doorOptions').classList.toggle('disabled',ft!=='door'); $('drawerOptions').classList.toggle('disabled',ft!=='drawers');}
-document.querySelectorAll('input[name="frontType"]').forEach(el=>el.addEventListener('change',()=>{syncOptions();render()})); document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',render)); document.querySelectorAll('input[name="topType"]').forEach(el=>el.addEventListener('change',render)); syncOptions(); render();
+function typeLabel(type){ if(type==='base_sink')return 'dolna pod zlew'; if(type==='base_corner_simple')return 'dolna narożna prosta'; return 'dolna prosta'; }
+function syncOptions(){
+ const type=$('cabinetType').value; const ft=getRadio('frontType');
+ const isSimple=type==='base_simple'; const isSink=type==='base_sink'; const isCorner=type==='base_corner_simple';
+ $('simpleTopOptions').classList.toggle('hidden', !isSimple);
+ $('frontTypeOptions').classList.toggle('hidden', !isSimple);
+ $('drawerOptions').classList.toggle('hidden', !isSimple || ft!=='drawers');
+ $('drawerOptions').classList.toggle('disabled', !isSimple || ft!=='drawers');
+ $('cornerOptions').classList.toggle('hidden', !isCorner);
+ $('doorOptions').classList.toggle('hidden', isSink);
+ $('doorOptions').classList.toggle('disabled', isSimple && ft!=='door');
+ if(isCorner){ $('frontTypeOptions').classList.add('hidden'); $('drawerOptions').classList.add('hidden'); }
+ render();
+}
+document.querySelectorAll('input[name="frontType"]').forEach(el=>el.addEventListener('change',syncOptions)); document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',render)); document.querySelectorAll('input[name="topType"]').forEach(el=>el.addEventListener('change',render)); $('cabinetType').addEventListener('change',syncOptions); syncOptions();
 </script>
 </body>
 </html>
