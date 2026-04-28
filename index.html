@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kalkulator mebli - v3</title>
+  <title>Kalkulator mebli - v4</title>
   <style>
     * { box-sizing: border-box; }
     body { margin:0; font-family:Arial,sans-serif; background:#f4f4f5; color:#18181b; }
     .app { max-width:1500px; margin:0 auto; padding:24px; display:grid; grid-template-columns:360px 1fr; gap:20px; }
     .card { background:#fff; border:1px solid #e4e4e7; border-radius:14px; padding:18px; box-shadow:0 8px 22px rgba(0,0,0,.05); }
-    h1 { margin:0 0 10px; font-size:26px; } h2{margin:0 0 14px;font-size:18px;} h3{margin:22px 0 10px;font-size:16px;}
+    h1 { margin:0 0 10px; font-size:26px; } h2{margin:0 0 14px;font-size:18px;} h3{margin:22px 0 10px;font-size:16px;} h4{margin:18px 0 8px;font-size:15px;}
     label { display:block; font-size:13px; font-weight:700; margin-bottom:6px; }
     input, select { width:100%; padding:10px 11px; border:1px solid #d4d4d8; border-radius:10px; font-size:15px; background:#fff; }
     .row { display:grid; grid-template-columns:1fr 1fr; gap:10px; } .field{margin-bottom:13px;}
@@ -17,15 +17,15 @@
     .hint,.small{font-size:12px;line-height:1.45;color:#52525b}.disabled{opacity:.45;pointer-events:none}
     button{width:100%;margin-top:8px;padding:13px 15px;border:0;border-radius:12px;background:#18181b;color:#fff;font-size:15px;font-weight:800;cursor:pointer} button:hover{opacity:.9}
     .btn2{background:#3f3f46}.btnDanger{background:#b91c1c;padding:8px 10px;font-size:12px;margin:0;width:auto;border-radius:9px}.btnSmall{width:auto;padding:9px 12px;font-size:12px;border-radius:9px;margin:0 6px 8px 0;background:#3f3f46}
-    table{width:100%;border-collapse:collapse;font-size:14px;overflow:hidden;border-radius:12px} th,td{border-bottom:1px solid #e4e4e7;padding:10px;text-align:left;vertical-align:top} th{background:#fafafa;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+    table{width:100%;border-collapse:collapse;font-size:14px;overflow:hidden;border-radius:12px} th,td{border-bottom:1px solid #e4e4e7;padding:9px;text-align:left;vertical-align:top} th{background:#fafafa;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
     .summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.summaryBox{background:#fafafa;border:1px solid #e4e4e7;border-radius:12px;padding:13px}.summaryBox strong{display:block;font-size:20px;margin-top:3px}
-    .edgeMark{display:inline-block;line-height:1.1;font-family:'Courier New',monospace;white-space:pre-line}.warn{margin-top:12px;padding:11px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:13px;line-height:1.45}
+    .edgeMark{display:inline-block;line-height:1.1;font-family:'Courier New',monospace;white-space:pre-line;font-size:14px}.warn{margin-top:12px;padding:11px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:13px;line-height:1.45}
     .cabinetBox{border:1px solid #e4e4e7;border-radius:12px;padding:12px;margin-bottom:12px;background:#fff}.cabinetHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}.cabinetHead strong{font-size:15px}
-    .toolbar{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}.printOnly{display:none}
+    .toolbar{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}.printOnly{display:none}.sectionBox{border:1px solid #e4e4e7;border-radius:12px;padding:12px;margin-bottom:16px;background:#fff}.serviceCell{min-width:160px;color:#71717a}.cabinetTitle{background:#f4f4f5;font-weight:800;padding:9px 10px;border-radius:10px;margin:14px 0 8px}
     @media(max-width:900px){.app{grid-template-columns:1fr;padding:14px}.summary{grid-template-columns:1fr 1fr}}
     @media print{
-      body{background:#fff}.app{display:block;max-width:none;padding:0}.app aside,.noPrint{display:none!important}.card{box-shadow:none;border:0;padding:0}button{display:none}.printOnly{display:block}.summary{grid-template-columns:repeat(4,1fr)}
-      h1,h2,h3{break-after:avoid} table{break-inside:auto} tr{break-inside:avoid}
+      body{background:#fff}.app{display:block;max-width:none;padding:0}.app aside,.noPrint,#currentPreview,#cabinetListSection,#summarySection{display:none!important}.card{box-shadow:none;border:0;padding:0}button{display:none}.printOnly{display:block}.summary{grid-template-columns:repeat(4,1fr)}
+      h1,h2,h3,h4{break-after:avoid} table{break-inside:auto} tr{break-inside:avoid}.sectionBox{border:0;padding:0;margin-bottom:18px}.cabinetTitle{border:1px solid #ddd}
     }
   </style>
 </head>
@@ -33,7 +33,7 @@
 <div class="app">
   <aside class="card">
     <h1>Kalkulator mebli</h1>
-    <div class="hint">v3: wiele szafek + zbiorcza lista formatek do produkcji z opisem, co do czego.</div>
+    <div class="hint">v4: wiele szafek + lista produkcyjna osobno płyta/HDF + lista montażowa szafka po szafce.</div>
 
     <h3>Dane szafki</h3>
     <div class="field"><label>Nazwa szafki</label><input id="cabinetName" value="Szafka dolna" /></div>
@@ -67,59 +67,73 @@
   </aside>
 
   <main class="card">
-    <h1 class="printOnly">Lista formatek / wycena mebli</h1>
-    <h2>Podgląd aktualnej szafki</h2>
-    <div class="summary" id="currentSummary"></div>
-    <h3>Formatki aktualnej szafki</h3>
-    <table><thead><tr><th>Element</th><th>Szt.</th><th>Wymiar</th><th>Oklejanie</th><th>Materiał</th><th>Opis</th></tr></thead><tbody id="currentParts"></tbody></table>
+    <h1 class="printOnly">Lista formatek / montaż mebli</h1>
 
-    <h3>Szafki w wycenie</h3>
-    <div id="cabinetList"></div>
+    <section id="currentPreview">
+      <h2>Podgląd aktualnej szafki</h2>
+      <div class="summary" id="currentSummary"></div>
+      <h3>Formatki aktualnej szafki</h3>
+      <table><thead><tr><th>Element</th><th>Szt.</th><th>Wymiar</th><th>Oklejanie</th><th>Materiał</th><th>Opis</th></tr></thead><tbody id="currentParts"></tbody></table>
+    </section>
 
-    <h3>Suma całego zlecenia</h3>
-    <div class="summary" id="projectSummary"></div>
-    <table><thead><tr><th>Akcesorium</th><th>Ilość razem</th></tr></thead><tbody id="projectAccessories"></tbody></table>
+    <section id="cabinetListSection">
+      <h3>Szafki w wycenie</h3>
+      <div id="cabinetList"></div>
+    </section>
 
-    <h3>Lista formatek do produkcji</h3>
+    <section id="summarySection">
+      <h3>Suma całego zlecenia</h3>
+      <div class="summary" id="projectSummary"></div>
+      <table><thead><tr><th>Akcesorium</th><th>Ilość razem</th></tr></thead><tbody id="projectAccessories"></tbody></table>
+    </section>
+
+    <h2>Lista do zamówienia formatek</h2>
     <div class="toolbar noPrint">
       <button class="btnSmall" onclick="window.print()">Drukuj / zapisz PDF</button>
-      <button class="btnSmall" onclick="copyProductionList()">Kopiuj listę tekstowo</button>
+      <button class="btnSmall" onclick="copyProductionList()">Kopiuj listę produkcyjną</button>
+      <button class="btnSmall" onclick="copyAssemblyList()">Kopiuj listę montażową</button>
     </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Lp.</th>
-          <th>Nazwa / do czego</th>
-          <th>Szt.</th>
-          <th>Wymiar</th>
-          <th>Oklejanie</th>
-          <th>Materiał</th>
-          <th>Uwagi</th>
-        </tr>
-      </thead>
-      <tbody id="productionRows"></tbody>
-    </table>
+
+    <div class="sectionBox">
+      <h3>Płyta 18 mm / fronty</h3>
+      <table>
+        <thead><tr><th>Wymiar z oklejaniem</th><th>Szt.</th><th>Element / opis</th><th>Usługi</th></tr></thead>
+        <tbody id="boardProductionRows"></tbody>
+      </table>
+    </div>
+
+    <div class="sectionBox">
+      <h3>HDF</h3>
+      <table>
+        <thead><tr><th>Wymiar</th><th>Szt.</th><th>Element / opis</th><th>Usługi</th></tr></thead>
+        <tbody id="hdfProductionRows"></tbody>
+      </table>
+    </div>
+
+    <h2>Lista dla mnie do skręcania</h2>
+    <div id="assemblyList"></div>
   </main>
 </div>
 
 <script>
-const $=id=>document.getElementById(id); let project=JSON.parse(localStorage.getItem('mebleProjectV3')||localStorage.getItem('mebleProjectV2')||'[]');
+const $=id=>document.getElementById(id); let project=JSON.parse(localStorage.getItem('mebleProjectV4')||localStorage.getItem('mebleProjectV3')||localStorage.getItem('mebleProjectV2')||'[]');
 function mm2ToM2(w,h,q){return(w*h*q)/1000000} function mmToMb(mm){return mm/1000} function fmt(n,d=2){return Number(n).toFixed(d).replace('.',',')} function getRadio(n){return document.querySelector(`input[name="${n}"]:checked`).value}
 function edgeText(w,h,e){ if(e==='width1')return `<span class="edgeMark">${w} × ${h}\n___</span>`; if(e==='height1')return `<span class="edgeMark">${w} × ${h}\n_</span>`; if(e==='all')return `<span class="edgeMark">${w} × ${h}\n___   ___</span>`; return `${w} × ${h}`; }
-function edgeLabel(e){ if(e==='width1')return '1 × długość/szerokość z przodu'; if(e==='height1')return '1 × wysokość/przód'; if(e==='all')return 'dookoła'; return '-'; }
+function edgePlain(w,h,e){ if(e==='width1')return `${w} x ${h}\n___`; if(e==='height1')return `${w} x ${h}\n_`; if(e==='all')return `${w} x ${h}\n___   ___`; return `${w} x ${h}`; }
+function edgeLabel(e){ if(e==='width1')return 'oklejony 1 raz po pierwszym wymiarze/przodzie'; if(e==='height1')return 'oklejony 1 raz po pierwszym wymiarze/przodzie'; if(e==='all')return 'oklejony dookoła'; return '-'; }
 function cabinetLabel(c){ return `${c.name} ${c.S}`.trim(); }
-function addPart(parts,name,qty,w,h,material,edgingMm,edgeKind,note='',role=''){parts.push({name,qty,w,h,material,edgingMm,edgeKind,note,role})}
+function addPart(parts,name,qty,w,h,material,edgingMm,edgeKind,note='',role='',services=''){parts.push({name,qty,w,h,material,edgingMm,edgeKind,note,role,services})}
 function drawerFrontHeights(H,preset,smallH,gap){let count=preset==='1_big'?1:preset==='2_equal'?2:3; const net=(H-7)-((count-1)*gap); if(preset==='1_big')return[net]; if(preset==='2_equal'){const a=Math.floor(net/2);return[a,net-a]} if(preset==='3_equal'){const a=Math.floor(net/3),b=Math.floor(net/3);return[a,b,net-a-b]} const rest=net-smallH,big1=Math.floor(rest/2); if(preset==='1_small_2_big')return[smallH,big1,rest-big1]; return[big1,rest-big1,smallH];}
 function buildCabinet(){
  const name=$('cabinetName').value||'Szafka'; const S=+$('width').value,H=+$('height').value,D=+$('depth').value,T=+$('board').value, shelfDepth=+$('shelfDepth').value; const innerW=S-(2*T), topType=getRadio('topType'), frontType=getRadio('frontType'); const parts=[],accessories=[];
- addPart(parts,'Bok',2,H,D,'płyta',2*H,'height1','oklejony przód','boki korpusu'); addPart(parts,'Spód',1,innerW,D,'płyta',innerW,'width1','oklejony przód po krawędzi 18 mm','spód korpusu');
- if(topType==='full') addPart(parts,'Góra pełna',1,innerW,D,'płyta',innerW,'width1','oklejony przód','góra pełna korpusu'); else addPart(parts,'Listwa górna',2,innerW,100,'płyta',2*innerW,'width1','listwy na płasko, oklejony przód','listwy górne korpusu');
- addPart(parts,'Plecy HDF nakładane',1,S-2,H-2,'HDF',0,'none','1 mm luzu na stronę','plecy do korpusu');
+ addPart(parts,'Bok',2,H,D,'płyta 18mm',2*H,'height1','oklejony przód','bok'); addPart(parts,'Spód',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód po krawędzi 18 mm','spód');
+ if(topType==='full') addPart(parts,'Góra pełna',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód','góra pełna'); else addPart(parts,'Listwa górna',2,innerW,100,'płyta 18mm',2*innerW,'width1','listwy na płasko, oklejony przód','listwa górna');
+ addPart(parts,'Plecy HDF nakładane',1,S-2,H-2,'HDF',0,'none','1 mm luzu na stronę','plecy');
  if(frontType==='door'){
-  addPart(parts,'Front drzwiowy',1,S-3,H-7,'płyta/front',2*(S-3)+2*(H-7),'all','oklejony dookoła','front drzwiowy'); accessories.push(['Nóżki',4]); accessories.push(['Zawias prosty',S<=600?2:3]);
-  if($('hasShelves').checked){const q=+$('shelfQty').value; addPart(parts,'Półka',q,innerW,shelfDepth,'płyta',q*innerW,'width1','półka oklejona z przodu','półka wewnętrzna');}
+  addPart(parts,'Front drzwiowy',1,S-3,H-7,'płyta 18mm/front',2*(S-3)+2*(H-7),'all','oklejony dookoła','front drzwiowy'); accessories.push(['Nóżki',4]); accessories.push(['Zawias prosty',S<=600?2:3]);
+  if($('hasShelves').checked){const q=+$('shelfQty').value; addPart(parts,'Półka',q,innerW,shelfDepth,'płyta 18mm',q*innerW,'width1','półka oklejona z przodu','półka');}
  } else {
-  const heights=drawerFrontHeights(H,$('drawerPreset').value,+$('smallDrawerHeight').value,+$('drawerGap').value); heights.forEach((fh,i)=>addPart(parts,`Front szuflady ${i+1}`,1,S-3,fh,'płyta/front',2*(S-3)+2*fh,'all','oklejony dookoła',`front szuflady ${i+1}`)); accessories.push(['Nóżki',4]); accessories.push(['Blum Tandembox',heights.length]);
+  const heights=drawerFrontHeights(H,$('drawerPreset').value,+$('smallDrawerHeight').value,+$('drawerGap').value); heights.forEach((fh,i)=>addPart(parts,`Front szuflady ${i+1}`,1,S-3,fh,'płyta 18mm/front',2*(S-3)+2*fh,'all','oklejony dookoła',`front szuflady ${i+1}`)); accessories.push(['Nóżki',4]); accessories.push(['Blum Tandembox',heights.length]);
  }
  const sums=sumCabinet({parts,accessories}); return {name,S,H,D,topType,frontType,parts,accessories,sums};
 }
@@ -127,23 +141,30 @@ function sumCabinet(c){let boardM2=0,hdfM2=0,edgingMb=0,cuts=0; c.parts.forEach(
 function addCabinet(){ project.push(buildCabinet()); save(); render(); }
 function removeCabinet(i){ project.splice(i,1); save(); render(); }
 function clearProject(){ if(confirm('Wyczyścić całą wycenę?')){project=[];save();render();}}
-function save(){localStorage.setItem('mebleProjectV3',JSON.stringify(project));}
+function save(){localStorage.setItem('mebleProjectV4',JSON.stringify(project));}
 function summaryHtml(s){return `<div class="summaryBox"><span class="small">Płyta</span><strong>${fmt(s.boardM2)} m²</strong></div><div class="summaryBox"><span class="small">HDF</span><strong>${fmt(s.hdfM2)} m²</strong></div><div class="summaryBox"><span class="small">Oklejanie 1 mm</span><strong>${fmt(s.edgingMb)} mb</strong></div><div class="summaryBox"><span class="small">Cięcia</span><strong>${s.cuts} szt.</strong></div>`}
 function partsRows(parts, cLabel='aktualnej szafki'){return parts.map(p=>`<tr><td><strong>${p.name}</strong><div class="small">${p.note}</div></td><td>${p.qty}</td><td>${edgeText(p.w,p.h,p.edgeKind)}</td><td>${p.edgingMm?fmt(mmToMb(p.edgingMm))+' mb':'-'}</td><td>${p.material}</td><td>${p.role} do ${cLabel}</td></tr>`).join('')}
-function productionRows(){
- let rows=[]; project.forEach((c,ci)=>{ const label=cabinetLabel(c); c.parts.forEach(p=>rows.push({cabinetIndex:ci+1,label,p})); });
- return rows.map((r,i)=>`<tr><td>${i+1}</td><td><strong>${r.p.role} do ${r.label}</strong><div class="small">element: ${r.p.name}</div></td><td>${r.p.qty}</td><td>${edgeText(r.p.w,r.p.h,r.p.edgeKind)}</td><td>${r.p.edgingMm?fmt(mmToMb(r.p.edgingMm))+' mb — '+edgeLabel(r.p.edgeKind):'-'}</td><td>${r.p.material}</td><td>${r.p.note}</td></tr>`).join('') || '<tr><td colspan="7">Brak formatek — dodaj szafkę do wyceny.</td></tr>';
+function allRows(){let rows=[]; project.forEach((c,ci)=>{const label=cabinetLabel(c); c.parts.forEach(p=>rows.push({cabinetIndex:ci+1,label,p}));}); return rows;}
+function productionRows(materialType){
+ const rows=allRows().filter(r=> materialType==='HDF' ? r.p.material==='HDF' : r.p.material!=='HDF');
+ return rows.map((r)=>`<tr><td>${edgeText(r.p.w,r.p.h,r.p.edgeKind)}</td><td>${r.p.qty}</td><td><strong>${r.p.role} — ${r.label}</strong><div class="small">${r.p.note}</div></td><td class="serviceCell">${r.p.services || ''}</td></tr>`).join('') || '<tr><td colspan="4">Brak formatek.</td></tr>';
+}
+function assemblyListHtml(){
+ if(!project.length) return '<div class="hint">Nie dodano jeszcze żadnej szafki.</div>';
+ return project.map((c,i)=>`<div class="sectionBox"><div class="cabinetTitle">${i+1}. ${cabinetLabel(c)} — ${c.S} × ${c.H} × ${c.D} mm</div><table><thead><tr><th>Wymiar z oklejaniem</th><th>Szt.</th><th>Co to jest</th><th>Materiał</th><th>Uwagi/usługi</th></tr></thead><tbody>${c.parts.map(p=>`<tr><td>${edgeText(p.w,p.h,p.edgeKind)}</td><td>${p.qty}</td><td><strong>${p.role}</strong><div class="small">${p.name}</div></td><td>${p.material}</td><td>${p.note}${p.services ? '<br>Usługi: '+p.services : ''}</td></tr>`).join('')}</tbody></table></div>`).join('');
 }
 function copyProductionList(){
- let lines=['LISTA FORMATEK DO PRODUKCJI']; let lp=1; project.forEach((c)=>{ const label=cabinetLabel(c); c.parts.forEach(p=>{ lines.push(`${lp}. ${p.role} do ${label} | ${p.qty} szt. | ${p.w} x ${p.h} | materiał: ${p.material} | oklejanie: ${p.edgingMm?fmt(mmToMb(p.edgingMm))+' mb, '+edgeLabel(p.edgeKind):'brak'} | ${p.note}`); lp++; }); });
- navigator.clipboard.writeText(lines.join('\n')).then(()=>alert('Lista formatek skopiowana.'));
+ let lines=['LISTA DO ZAMÓWIENIA FORMATEK','', 'PŁYTA 18MM / FRONTY']; allRows().filter(r=>r.p.material!=='HDF').forEach(r=>lines.push(`${edgePlain(r.p.w,r.p.h,r.p.edgeKind)} | ${r.p.qty} szt. | ${r.p.role} — ${r.label} | usługi: ${r.p.services||''}`)); lines.push('', 'HDF'); allRows().filter(r=>r.p.material==='HDF').forEach(r=>lines.push(`${edgePlain(r.p.w,r.p.h,r.p.edgeKind)} | ${r.p.qty} szt. | ${r.p.role} — ${r.label} | usługi: ${r.p.services||''}`)); navigator.clipboard.writeText(lines.join('\n')).then(()=>alert('Lista produkcyjna skopiowana.'));
+}
+function copyAssemblyList(){
+ let lines=['LISTA DLA MNIE DO SKRĘCANIA']; project.forEach((c,i)=>{lines.push('',`${i+1}. ${cabinetLabel(c)} — ${c.S} x ${c.H} x ${c.D} mm`); c.parts.forEach(p=>lines.push(`${edgePlain(p.w,p.h,p.edgeKind)} | ${p.qty} szt. | ${p.role} | ${p.material} | ${p.note}`));}); navigator.clipboard.writeText(lines.join('\n')).then(()=>alert('Lista montażowa skopiowana.'));
 }
 function render(){
  const cur=buildCabinet(); $('currentSummary').innerHTML=summaryHtml(cur.sums); $('currentParts').innerHTML=partsRows(cur.parts, cabinetLabel(cur));
  $('cabinetList').innerHTML=project.length?project.map((c,i)=>`<div class="cabinetBox"><div class="cabinetHead"><div><strong>${i+1}. ${cabinetLabel(c)}</strong><div class="small">${c.S} × ${c.H} × ${c.D} mm | ${c.frontType==='door'?'drzwi':'szuflady'}</div></div><button class="btnDanger" onclick="removeCabinet(${i})">Usuń</button></div><div class="small">Płyta: ${fmt(c.sums.boardM2)} m² | HDF: ${fmt(c.sums.hdfM2)} m² | Okleina: ${fmt(c.sums.edgingMb)} mb | Cięcia: ${c.sums.cuts}</div></div>`).join(''):'<div class="hint">Nie dodano jeszcze żadnej szafki.</div>';
  const total={boardM2:0,hdfM2:0,edgingMb:0,cuts:0}; const acc={}; project.forEach(c=>{total.boardM2+=c.sums.boardM2;total.hdfM2+=c.sums.hdfM2;total.edgingMb+=c.sums.edgingMb;total.cuts+=c.sums.cuts;c.accessories.forEach(a=>acc[a[0]]=(acc[a[0]]||0)+a[1]);});
  $('projectSummary').innerHTML=summaryHtml(total); $('projectAccessories').innerHTML=Object.keys(acc).length?Object.entries(acc).map(([k,v])=>`<tr><td><strong>${k}</strong></td><td>${v}</td></tr>`).join(''):'<tr><td colspan="2">Brak</td></tr>';
- $('productionRows').innerHTML=productionRows();
+ $('boardProductionRows').innerHTML=productionRows('board'); $('hdfProductionRows').innerHTML=productionRows('HDF'); $('assemblyList').innerHTML=assemblyListHtml();
 }
 function syncOptions(){const ft=getRadio('frontType'); $('doorOptions').classList.toggle('disabled',ft!=='door'); $('drawerOptions').classList.toggle('disabled',ft!=='drawers');}
 document.querySelectorAll('input[name="frontType"]').forEach(el=>el.addEventListener('change',()=>{syncOptions();render()})); document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',render)); document.querySelectorAll('input[name="topType"]').forEach(el=>el.addEventListener('change',render)); syncOptions(); render();
