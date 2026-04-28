@@ -140,8 +140,24 @@
 const $=id=>document.getElementById(id); let project=JSON.parse(localStorage.getItem('mebleProjectV5')||localStorage.getItem('mebleProjectV4')||localStorage.getItem('mebleProjectV3')||localStorage.getItem('mebleProjectV2')||'[]');
 function mm2ToM2(w,h,q){return(w*h*q)/1000000} function mmToMb(mm){return mm/1000} function fmt(n,d=2){return Number(n).toFixed(d).replace('.',',')} function getRadio(n){return document.querySelector(`input[name="${n}"]:checked`).value}
 function line(len){ const chars=Math.max(3, Math.min(18, Math.round(len/55))); return '_'.repeat(chars); }
-function edgeText(w,h,e){ const lw=line(w), lh=line(h); if(e==='width1')return `<span class="edgeMark">${w} × ${h}\n${lw}</span>`; if(e==='width2')return `<span class="edgeMark">${w} × ${h}\n${lw}\n${lw}</span>`; if(e==='height1')return `<span class="edgeMark">${w} × ${h}\n${lh}</span>`; if(e==='all')return `<span class="edgeMark">${w} × ${h}\n${lw}\n${lw}</span>`; return `${w} × ${h}`; }
-function edgePlain(w,h,e){ const lw=line(w), lh=line(h); if(e==='width1')return `${w} x ${h}\n${lw}`; if(e==='width2')return `${w} x ${h}\n${lw}\n${lw}`; if(e==='height1')return `${w} x ${h}\n${lh}`; if(e==='all')return `${w} x ${h}\n${lw}\n${lw}`; return `${w} x ${h}`; }
+function edgeText(w,h,e){
+ const lw=line(w), lh=line(h);
+ const dim=(val, marks)=>`<span style="display:inline-block;text-align:center;vertical-align:top;line-height:1.05;">${val}${marks?'<br>'+marks:''}</span>`;
+ if(e==='width1')return `<span class="edgeMark">${dim(w,lw)} <span style="vertical-align:top;">×</span> ${dim(h,'')}</span>`;
+ if(e==='width2')return `<span class="edgeMark">${dim(w,lw+'<br>'+lw)} <span style="vertical-align:top;">×</span> ${dim(h,'')}</span>`;
+ if(e==='height1')return `<span class="edgeMark">${dim(w,'')} <span style="vertical-align:top;">×</span> ${dim(h,lh)}</span>`;
+ if(e==='height2')return `<span class="edgeMark">${dim(w,'')} <span style="vertical-align:top;">×</span> ${dim(h,lh+'<br>'+lh)}</span>`;
+ if(e==='all')return `<span class="edgeMark">${dim(w,lw+'<br>'+lw)} <span style="vertical-align:top;">×</span> ${dim(h,lh+'<br>'+lh)}</span>`;
+ return `${w} × ${h}`;
+}
+function edgePlain(w,h,e){
+ if(e==='width1')return `${w} x ${h}  [oklejony: ${w}]`;
+ if(e==='width2')return `${w} x ${h}  [oklejony: ${w} x2]`;
+ if(e==='height1')return `${w} x ${h}  [oklejony: ${h}]`;
+ if(e==='height2')return `${w} x ${h}  [oklejony: ${h} x2]`;
+ if(e==='all')return `${w} x ${h}  [oklejony dookoła: ${w} x2, ${h} x2]`;
+ return `${w} x ${h}`;
+}
 function edgeLabel(e){ if(e==='width1')return 'oklejony 1 raz po pierwszym wymiarze/przodzie'; if(e==='width2')return 'oklejony 2 razy po pierwszym wymiarze'; if(e==='height1')return 'oklejony 1 raz po wysokości/przodzie'; if(e==='all')return 'oklejony dookoła'; return '-'; }
 function cabinetLabel(c){ return `${c.name} ${c.S}`.trim(); }
 function addPart(parts,name,qty,w,h,material,edgingMm,edgeKind,note='',role='',services=''){parts.push({name,qty,w,h,material,edgingMm,edgeKind,note,role,services})}
@@ -174,7 +190,7 @@ function buildCornerSimple(parts, accessories, S,H,D,T, shelfDepth){
  addPart(parts,'Góra pełna',1,innerW,D,'płyta 18mm',innerW,'width1','oklejony przód','góra pełna');
  addPart(parts,'Plecy HDF nakładane',1,S-2,H-2,'HDF',0,'none','1 mm luzu na stronę','plecy');
  addPart(parts,'Front narożny',1,frontW,H-7,'płyta 18mm/front',2*frontW+2*(H-7),'all','oklejony dookoła','front');
- addPart(parts,'Odbicie widoczne',1,visibleReturnW,H-7,'płyta 18mm/front',2*visibleReturnW+2*(H-7),'all','widoczne odbicie 100 mm, oklejone dookoła','odbicie widoczne');
+ addPart(parts,'Odbicie widoczne',1,visibleReturnW,H-7,'płyta 18mm/front',2*visibleReturnW+2*(H-7),'all','widoczne odbicie 100 mm, oklejone dookoła','odbicie widoczne'),'all','widoczne odbicie 100 mm, oklejone dookoła','odbicie widoczne');
  addPart(parts,'Odbicie ślepe',1,blindW,H,'płyta 18mm',H,'height1',`szerokość = S - front - 100 - szczeliny (${gaps} mm)`,'odbicie ślepe');
  if($('hasShelves').checked){const q=+$('shelfQty').value; addPart(parts,'Półka narożna prosta',q,innerW,shelfDepth,'płyta 18mm',q*innerW,'width1','półka oklejona z przodu','półka');}
  accessories.push(['Nóżki',6]); accessories.push(['Zawias prosty',frontW<=600?2:3]);
