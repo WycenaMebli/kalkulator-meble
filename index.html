@@ -5,23 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Kalkulator mebli v10</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f4f5;color:#18181b}.app{max-width:1500px;margin:0 auto;padding:24px;display:grid;grid-template-columns:390px 1fr;gap:20px}.card{background:white;border:1px solid #e4e4e7;border-radius:14px;padding:18px;box-shadow:0 8px 22px rgba(0,0,0,.05)}h1{font-size:26px;margin:0 0 10px}h2{font-size:18px;margin:0 0 14px}h3{font-size:16px;margin:22px 0 10px}label{font-size:13px;font-weight:700;margin-bottom:6px;display:block}input,select{width:100%;padding:10px 11px;border:1px solid #d4d4d8;border-radius:10px;font-size:15px;background:white}#cabinetName{background:#eff6ff;border-color:#93c5fd}input.requiredMissing{border-color:#dc2626;background:#fef2f2}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{margin-bottom:13px}.radio,.check{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:14px}.radio input,.check input{width:auto}.hidden{display:none!important}.disabled{opacity:.45;pointer-events:none}.hint,.small{font-size:12px;color:#52525b;line-height:1.45}.autoHint{font-size:12px;color:#2563eb;margin-top:4px}.warn{margin-top:12px;padding:11px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:13px;line-height:1.45}.errorBox{margin:10px 0;padding:11px;border-radius:10px;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-size:13px;display:none}.cornerCalc{margin-top:10px;padding:12px;border-radius:12px;background:#eef6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:13px;line-height:1.5}.cornerCalc.error{background:#fef2f2;border-color:#fecaca;color:#991b1b}button{width:100%;border:0;border-radius:12px;background:#18181b;color:white;padding:13px 15px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px}.btn2{background:#3f3f46}.btnDanger{background:#b91c1c;width:auto;padding:8px 10px;font-size:12px;border-radius:9px;margin:0}.btnSmall{width:auto;padding:9px 12px;font-size:12px;border-radius:9px;margin:0 6px 8px 0;background:#3f3f46}.summary{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:18px}.summaryBox{background:#fafafa;border:1px solid #e4e4e7;border-radius:12px;padding:13px}.summaryBox strong{display:block;font-size:18px;margin-top:3px}table{width:100%;border-collapse:collapse;font-size:14px}th,td{border-bottom:1px solid #e4e4e7;padding:9px;text-align:left;vertical-align:top}th{background:#fafafa;font-size:12px;text-transform:uppercase;letter-spacing:.04em}.cabinetBox{border:1px solid #e4e4e7;border-radius:12px;padding:12px;margin-bottom:12px}.cabinetHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sectionBox{border:1px solid #e4e4e7;border-radius:12px;padding:12px;margin-bottom:16px}.cabinetTitle{background:#f4f4f5;font-weight:800;padding:9px 10px;border-radius:10px;margin:14px 0 8px}.toolbar{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}.printOnly{display:none}.edgeWrap{display:inline-flex;gap:5px;align-items:flex-start;font-family:'Courier New',monospace;line-height:1.05}.edgeDim{display:inline-flex;flex-direction:column;align-items:center;min-width:34px}.mark{height:12px;line-height:12px}@media(max-width:1000px){.app{grid-template-columns:1fr;padding:14px}.summary{grid-template-columns:1fr 1fr}}@media print{body{background:white}.app{display:block;padding:0}.app aside,.noPrint,#currentPreview,#cabinetListSection,#summarySection{display:none!important}.card{box-shadow:none;border:0;padding:0}.printOnly{display:block}button{display:none}.summary{grid-template-columns:repeat(3,1fr)}body.print-production #assemblyPrintSection{display:none!important}body.print-assembly #productionPrintSection{display:none!important}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f4f5;color:#18181b}.app{max-width:1500px;margin:0 auto;padding:24px;display:grid;grid-template-columns:390px 1fr;gap:20px}.card{background:white;border:1px solid #e4e4e7;border-radius:14px;padding:18px;box-shadow:0 8px 22px rgba(0,0,0,.05)}h1{font-size:26px;margin:0 0 10px}h2{font-size:18px;margin:0 0 14px}h3{font-size:16px;margin:22px 0 10px}label{font-size:13px;font-weight:700;margin-bottom:6px;display:block}input,select{width:100%;padding:10px 11px;border:1px solid #d4d4d8;border-radius:10px;font-size:15px;background:white}#cabinetName{background:#eff6ff;border-color:#93c5fd}input.requiredMissing{border-color:#dc2626;background:#fef2f2}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{margin-bottom:13px}.radio,.check{display:flex;align-items:center;gap:8px;margin:8px 0;font-size:14px}.radio input,.check input{width:auto}.hidden{display:none!important}.disabled{opacity:.45;pointer-events:none}.hint,.small{font-size:12px;color:#52525b;line-height:1.45}.autoHint{font-size:12px;color:#2563eb;margin-top:4px}.warn{margin-top:12px;padding:11px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#7c2d12;font-size:13px;line-height:1.45}.errorBox{margin:10px 0;padding:11px;border-radius:10px;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;font-size:13px;display:none}.cornerCalc{margin-top:10px;padding:12px;border-radius:12px;background:#eef6ff;border:1px solid #bfdbfe;color:#1e3a8a;font-size:13px;line-height:1.5}.cornerCalc.error{background:#fef2f2;border-color:#fecaca;color:#991b1b}button{width:100%;border:0;border-radius:12px;background:#18181b;color:white;padding:13px 15px;font-size:15px;font-weight:800;cursor:pointer;margin-top:8px}.btn2{background:#3f3f46}.btnDanger{background:#b91c1c;width:auto;padding:8px 10px;font-size:12px;border-radius:9px;margin:0}.btnSmall{width:auto;padding:9px 12px;font-size:12px;border-radius:9px;margin:0 6px 8px 0;background:#3f3f46}.summary{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:18px}.summaryBox{background:#fafafa;border:1px solid #e4e4e7;border-radius:12px;padding:13px}.summaryBox strong{display:block;font-size:18px;margin-top:3px}table{width:100%;border-collapse:collapse;font-size:14px}th,td{border-bottom:1px solid #e4e4e7;padding:9px;text-align:left;vertical-align:top}th{background:#fafafa;font-size:12px;text-transform:uppercase;letter-spacing:.04em}.cabinetBox{border:1px solid #e4e4e7;border-radius:12px;padding:12px;margin-bottom:12px}.cabinetHead{display:flex;justify-content:space-between;gap:10px;align-items:center}.sectionBox{border:1px solid #e4e4e7;border-radius:12px;padding:12px;margin-bottom:16px}.cabinetTitle{background:#f4f4f5;font-weight:800;padding:9px 10px;border-radius:10px;margin:14px 0 8px}.toolbar{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}.printOnly{display:none}.edgeWrap{display:inline-flex;gap:5px;align-items:flex-start;font-family:'Courier New',monospace;line-height:1.05}.startScreen{max-width:980px;margin:40px auto;padding:24px}.startGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.projectCard{border:1px solid #e4e4e7;border-radius:14px;padding:14px;margin-bottom:10px;background:#fff;display:flex;justify-content:space-between;gap:12px;align-items:center}.projectCard strong{display:block}.projectCard .small{margin-top:3px}.projectActions{display:flex;gap:8px;flex-wrap:wrap}.projectActions button{width:auto;margin:0;padding:9px 12px;font-size:13px}.blueBox{background:#eff6ff;border:1px solid #bfdbfe;border-radius:14px;padding:14px}.topBar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px;background:#fafafa;border:1px solid #e4e4e7;border-radius:14px;padding:12px}.topBar button{width:auto;margin:0;padding:9px 12px;font-size:13px}@media(max-width:900px){.startGrid{grid-template-columns:1fr}.startScreen{margin:0;padding:14px}}.edgeDim{display:inline-flex;flex-direction:column;align-items:center;min-width:34px}.mark{height:12px;line-height:12px}@media(max-width:1000px){.app{grid-template-columns:1fr;padding:14px}.summary{grid-template-columns:1fr 1fr}}@media print{body{background:white}.app{display:block;padding:0}.app aside,.noPrint,#currentPreview,#cabinetListSection,#summarySection{display:none!important}.card{box-shadow:none;border:0;padding:0}.printOnly{display:block}button{display:none}.summary{grid-template-columns:repeat(3,1fr)}body.print-production #assemblyPrintSection{display:none!important}body.print-assembly #productionPrintSection{display:none!important}}
 </style>
 </head>
 <body>
-<div class="app">
+<div id="startScreen" class="startScreen">
+  <div class="card">
+    <h1>Kalkulator mebli</h1>
+    <div class="hint">Wybierz zapisany projekt albo utwórz nowy.</div>
+    <div class="startGrid" style="margin-top:18px;">
+      <div class="blueBox">
+        <h2>Nowy projekt</h2>
+        <div class="field"><label>Nazwa projektu</label><input id="startProjectName" value="Kuchnia Kowalscy" placeholder="np. Kuchnia Kowalscy"></div>
+        <button onclick="createProjectFromStart()">Utwórz i przejdź do kalkulatora</button>
+      </div>
+      <div>
+        <h2>Zapisane projekty</h2>
+        <div id="startProjectsList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="app" class="app hidden">
 <aside class="card">
 <h1>Kalkulator mebli</h1>
 <div class="hint">v11 — projekty zapisane lokalnie, sortowane po dacie edycji.</div>
 <div id="errorBox" class="errorBox"></div>
 
-<h3>Projekt</h3>
-<div class="field"><label>Wybierz zapisany projekt</label><select id="projectSelect"></select></div>
-<div class="field"><label>Nazwa projektu</label><input id="projectName" value="Nowy projekt" placeholder="np. Kuchnia Kowalscy"></div>
-<button onclick="saveCurrentProject()">Zapisz projekt</button>
-<button class="btn2" onclick="newProject()">Nowy projekt</button>
-<button class="btn2" onclick="deleteCurrentProject()">Usuń projekt</button>
-<div class="hint" id="projectMeta"></div>
+<div class="topBar"><div><strong>Projekt:</strong><br><span id="currentProjectNameSide" class="small"></span></div><button onclick="backToProjects()">Zmień projekt</button></div>
 
 <h3>Fronty</h3>
 <div class="field"><label>Typ frontów</label><select id="frontMaterial"><option value="board">Fronty z płyty oklejane</option><option value="mdf">Fronty z MDF lakierowane</option></select></div>
@@ -116,7 +128,29 @@ function newProject(){
  if(name===null)return;
  currentProjectId=uid(); project=[];
  projects.push({id:currentProjectId,name:(name.trim()||'Nowy projekt'),items:project,createdAt:nowIso(),updatedAt:nowIso()});
- persistProjects(); renderProjectSelector(); render();
+ persistProjects(); renderProjectSelector(); openProject(currentProjectId);
+}
+function createProjectFromStart(){
+ const name=($('startProjectName').value||'Nowy projekt').trim()||'Nowy projekt';
+ currentProjectId=uid(); project=[];
+ projects.push({id:currentProjectId,name,items:project,createdAt:nowIso(),updatedAt:nowIso()});
+ persistProjects(); openProject(currentProjectId);
+}
+function openProject(id){
+ const p=projects.find(x=>x.id===id); if(!p)return;
+ currentProjectId=id; project=p.items||[];
+ $('startScreen').classList.add('hidden'); $('app').classList.remove('hidden');
+ renderProjectSelector(); render();
+}
+function backToProjects(){
+ save(); $('app').classList.add('hidden'); $('startScreen').classList.remove('hidden'); renderProjectSelector();
+}
+function deleteProjectFromStart(id){
+ const p=projects.find(x=>x.id===id); if(!p)return;
+ if(!confirm('Usunąć projekt: '+p.name+'?'))return;
+ projects=projects.filter(x=>x.id!==id);
+ if(currentProjectId===id){currentProjectId=projects[0]?.id||null; project=projects[0]?.items||[];}
+ persistProjects(); renderProjectSelector();
 }
 function loadProject(id){
  const p=projects.find(x=>x.id===id); if(!p)return;
@@ -124,19 +158,19 @@ function loadProject(id){
 }
 function deleteCurrentProject(){
  const p=currentProject(); if(!p)return;
- if(!confirm('Usunąć projekt: '+p.name+'?'))return;
- projects=projects.filter(x=>x.id!==currentProjectId);
- if(!projects.length){currentProjectId=uid(); project=[]; projects=[{id:currentProjectId,name:'Nowy projekt',items:project,createdAt:nowIso(),updatedAt:nowIso()}];}
- projects.sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt)); currentProjectId=projects[0].id; project=projects[0].items||[];
- persistProjects(); renderProjectSelector(); render();
+ deleteProjectFromStart(p.id);
+ backToProjects();
 }
 function renderProjectSelector(){
- const sel=$('projectSelect'); if(!sel)return;
- projects.sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));
- sel.innerHTML=projects.map(p=>'<option value="'+p.id+'">'+p.name+' — '+formatDate(p.updatedAt)+'</option>').join('');
- sel.value=currentProjectId;
  const p=currentProject();
- if(p){$('projectName').value=p.name;$('projectMeta').innerHTML='Utworzono: '+formatDate(p.createdAt)+'<br>Ostatnia edycja: '+formatDate(p.updatedAt)}
+ const side=$('currentProjectNameSide');
+ if(side && p){side.innerHTML=p.name+'<br>Ostatnia edycja: '+formatDate(p.updatedAt)}
+ const list=$('startProjectsList');
+ if(list){
+  projects.sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));
+  if(!projects.length){list.innerHTML='<div class="hint">Brak zapisanych projektów.</div>'}
+  else list.innerHTML=projects.map(p=>'<div class="projectCard"><div><strong>'+p.name+'</strong><div class="small">Ostatnia edycja: '+formatDate(p.updatedAt)+'</div></div><div class="projectActions"><button onclick="openProject(\''+p.id+'\')">Otwórz</button><button class="btnDanger" onclick="deleteProjectFromStart(\''+p.id+'\')">Usuń</button></div></div>').join('');
+ }
 }function removeCabinet(i){project.splice(i,1);save();render()}function clearProject(){if(confirm('Wyczyścić szafki w aktualnym projekcie?')){project=[];save();render()}}
 function summary(s){return ['boardM2:Płyta 18','mdfM2:MDF 19','hdfM2:HDF','edgingMb:Oklejanie','lacquerM2:Lakier','cuts:Cięcia'].map(x=>{let [k,l]=x.split(':');return '<div class="summaryBox"><span class="small">'+l+'</span><strong>'+fmt(s[k])+(k==='cuts'?' szt.':k==='edgingMb'?' mb':' m²')+'</strong></div>'}).join('')}
 function partWork(p){if(p.material==='MDF 19mm lakier')return 'lakier';return p.edgeMm?fmt(mb(p.edgeMm))+' mb — '+edgeInfo(p.edgeKind):'-'}
@@ -153,7 +187,6 @@ function sync(){const type=$('cabinetType').value,ft=radio('frontType');if(type=
 function printMode(mode){document.body.classList.remove('print-production','print-assembly');document.body.classList.add(mode==='assembly'?'print-assembly':'print-production');window.print();setTimeout(()=>document.body.classList.remove('print-production','print-assembly'),500)}
 function copyProductionList(){navigator.clipboard.writeText(allRows().map(r=>r.p.w+' x '+r.p.h+' | '+r.p.qty+' szt. | '+r.p.role+' — '+r.label).join('\n'))}function copyAssemblyList(){copyProductionList()}
 document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',()=>{if(el.id==='depth'&&$('cabinetType').value==='wall_cabinet'&&!upperShelfDepthManual)setUpperDefaults(false); if(el.id==='projectName'){let p=currentProject(); if(p){p.name=$('projectName').value.trim()||'Nowy projekt';p.updatedAt=nowIso();persistProjects();renderProjectSelector();}} render()}));
-$('projectSelect').addEventListener('change',e=>loadProject(e.target.value));
 renderProjectSelector();document.querySelectorAll('input[name="frontType"],input[name="topType"]').forEach(el=>el.addEventListener('change',sync));$('cabinetType').addEventListener('change',sync);sync();
 </script>
 </body>
