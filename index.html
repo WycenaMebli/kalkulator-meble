@@ -105,8 +105,19 @@
 
 <script>
 const MDF_THICKNESS_M=0.019;let projects=[],currentProjectId=null,project=[],extraElements=[];
-let editIndex=null;try{projects=JSON.parse(localStorage.getItem('mebleProjectsV14')||localStorage.getItem('mebleProjectsV13')||'[]')}catch(e){projects=[]}
-function uid(){return 'p_'+Date.now()+'_'+Math.random().toString(16).slice(2)}function nowIso(){return new Date().toISOString()}function formatDate(iso){return iso?new Date(iso).toLocaleString('pl-PL'):'-'}function persistProjects(){localStorage.setItem('mebleProjectsV14',JSON.stringify(projects))}function currentProject(){return projects.find(p=>p.id===currentProjectId)}function ensureInitialProject(){if(projects.length){projects.sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));currentProjectId=projects[0].id;project=projects[0].items||[];extraElements=projects[0].extras||[]}else{currentProjectId=uid();project=[];extraElements=[];projects=[{id:currentProjectId,name:'Nowy projekt',items:project,extras:extraElements,createdAt:nowIso(),updatedAt:nowIso()}];persistProjects()}}ensureInitialProject();
+let editIndex=null;// MIGRACJA + WSPÓLNY KLUCZ
+(function(){
+  const v14 = localStorage.getItem('mebleProjectsV14');
+  const v13 = localStorage.getItem('mebleProjectsV13');
+  const unified = localStorage.getItem('mebleProjects');
+  if(!unified){
+    if(v14){ localStorage.setItem('mebleProjects', v14); }
+    else if(v13){ localStorage.setItem('mebleProjects', v13); }
+  }
+})();
+
+try{projects=JSON.parse(localStorage.getItem('mebleProjects')||'[]')}catch(e){projects=[]}
+function uid(){return 'p_'+Date.now()+'_'+Math.random().toString(16).slice(2)}function nowIso(){return new Date().toISOString()}function formatDate(iso){return iso?new Date(iso).toLocaleString('pl-PL'):'-'}function persistProjects(){localStorage.setItem('mebleProjects',JSON.stringify(projects))}function currentProject(){return projects.find(p=>p.id===currentProjectId)}function ensureInitialProject(){if(projects.length){projects.sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));currentProjectId=projects[0].id;project=projects[0].items||[];extraElements=projects[0].extras||[]}else{currentProjectId=uid();project=[];extraElements=[];projects=[{id:currentProjectId,name:'Nowy projekt',items:project,extras:extraElements,createdAt:nowIso(),updatedAt:nowIso()}];persistProjects()}}ensureInitialProject();
 function $(id){return document.getElementById(id)}function n(id,def=0){const v=parseFloat($(id).value);return Number.isFinite(v)?v:def}function checked(id){return $(id).checked}function radio(name){return document.querySelector('input[name="'+name+'"]:checked').value}function fmt(x,d=2){return Number(x||0).toFixed(d).replace('.',',')}function mm2(w,h,q=1){return w*h*q/1000000}function mb(mm){return mm/1000}function showError(msg){const b=$('errorBox');b.textContent=msg;b.style.display=msg?'block':'none'}
 function marks(v){return '_'.repeat(Math.max(3,Math.min(14,String(Math.round(v)).length*2)))}function dim(v,c){let m='';for(let i=0;i<c;i++)m+='<span class="mark">'+marks(v)+'</span>';return '<span class="edgeDim"><span>'+Math.round(v)+'</span>'+m+'</span>'}function edge(w,h,e){if(e==='w1')return '<span class="edgeWrap">'+dim(w,1)+'×'+dim(h,0)+'</span>';if(e==='w2')return '<span class="edgeWrap">'+dim(w,2)+'×'+dim(h,0)+'</span>';if(e==='h1')return '<span class="edgeWrap">'+dim(w,0)+'×'+dim(h,1)+'</span>';if(e==='h2')return '<span class="edgeWrap">'+dim(w,0)+'×'+dim(h,2)+'</span>';if(e==='w1h2')return '<span class="edgeWrap">'+dim(w,1)+'×'+dim(h,2)+'</span>';if(e==='all')return '<span class="edgeWrap">'+dim(w,2)+'×'+dim(h,2)+'</span>';return Math.round(w)+' × '+Math.round(h)}function edgeInfo(e){return {w1:'1× pierwszy wymiar',w2:'2× pierwszy wymiar',h1:'1× drugi wymiar',h2:'2× drugi wymiar',w1h2:'1× pierwszy + 2× drugi',all:'dookoła'}[e]||'-'}
 function edgeMm(w,h,kind,qty=1){if(kind==='w1')return qty*w;if(kind==='w2')return qty*2*w;if(kind==='h1')return qty*h;if(kind==='h2')return qty*2*h;if(kind==='w1h2')return qty*(w+2*h);if(kind==='all')return qty*(2*w+2*h);return 0}
