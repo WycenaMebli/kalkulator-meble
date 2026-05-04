@@ -105,14 +105,51 @@
 
 <script>
 const MDF_THICKNESS_M=0.019;let projects=[],currentProjectId=null,project=[],extraElements=[];
-let editIndex=null;// MIGRACJA + WSPÓLNY KLUCZ
+let editIndex=null;// MIGRACJA + WSPÓLNY KLUCZ — szuka projektów zapisanych we wcześniejszych wersjach
 (function(){
-  const v14 = localStorage.getItem('mebleProjectsV14');
-  const v13 = localStorage.getItem('mebleProjectsV13');
-  const unified = localStorage.getItem('mebleProjects');
-  if(!unified){
-    if(v14){ localStorage.setItem('mebleProjects', v14); }
-    else if(v13){ localStorage.setItem('mebleProjects', v13); }
+  const possibleKeys = [
+    'mebleProjects',
+    'mebleProjectsV14',
+    'mebleProjectsV13',
+    'mebleProjectsV12',
+    'mebleProjectsV11'
+  ];
+  let merged = [];
+  const seen = new Set();
+
+  possibleKeys.forEach(key=>{
+    try{
+      const raw = localStorage.getItem(key);
+      if(!raw) return;
+      const arr = JSON.parse(raw);
+      if(!Array.isArray(arr)) return;
+      arr.forEach(p=>{
+        if(!p) return;
+        const id = p.id || ('recovered_'+Date.now()+'_'+Math.random().toString(16).slice(2));
+        const fingerprint = id+'|'+(p.name||'')+'|'+(p.createdAt||'')+'|'+(p.updatedAt||'');
+        if(seen.has(fingerprint)) return;
+        seen.add(fingerprint);
+        merged.push(Object.assign({id,name:'Odzyskany projekt',items:[],extras:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()},p,{id}));
+      });
+    }catch(e){}
+  });
+
+  // Stare pojedyncze projekty bez systemu wielu projektów
+  ['mebleProjectV10','mebleProjectV9','mebleProjectV8','mebleProjectV7','mebleProjectV6'].forEach(key=>{
+    try{
+      const raw = localStorage.getItem(key);
+      if(!raw) return;
+      const items = JSON.parse(raw);
+      if(!Array.isArray(items) || !items.length) return;
+      const id = 'recovered_'+key;
+      if(merged.some(p=>p.id===id)) return;
+      merged.push({id,name:'Odzyskany projekt '+key,items,extras:[],createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
+    }catch(e){}
+  });
+
+  if(merged.length){
+    merged.sort((a,b)=>new Date(b.updatedAt||0)-new Date(a.updatedAt||0));
+    localStorage.setItem('mebleProjects', JSON.stringify(merged));
   }
 })();
 
